@@ -72,8 +72,6 @@ public class HousingLocation {
 
 	}
 
-	
-
 	public HousingLocation(UUID locationID, @NotEmpty String address1, String address2,
 			@NotEmpty @Size(max = 50) String city, @NotEmpty @Size(max = 50) String state,
 			@NotEmpty @Size(max = 10) String zipCode, @NotEmpty String housingLocationName,
@@ -88,8 +86,6 @@ public class HousingLocation {
 		this.housingLocationName = housingLocationName;
 		this.trainingLocation = trainingLocation;
 	}
-
-
 
 	public UUID getLocationID() {
 		return locationID;
