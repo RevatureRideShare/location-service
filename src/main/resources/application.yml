@@ -7,3 +7,11 @@ spring:
   cloud:
     config:
       uri: http://localhost:8888    
+  jpa:
+    properites:
+      hibernate:
+        default_schema: ${RIDESHARE_POSTGRES_1909_SCHEMA}
+  datasource:
+    url: jdbc:postgresql://${RIDESHARE_POSTGRES_1909_URL}:5432/postgres?
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
