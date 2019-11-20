@@ -21,13 +21,13 @@ import javax.validation.constraints.NotEmpty;
 public class TrainingLocation {
 	
 	@Id
-	@SequenceGenerator(name="TLI_SEQ", sequenceName="training_location_id_seq")
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "TLI_SEQ")
+	@SequenceGenerator(name="TLI_SEQ", sequenceName="training_location_id_seq", allocationSize=1)
 	@Column(name="training_location_id")
 	private UUID trainingLocationID;
 	
-	@Column(name="training_location_name")
 	@NotEmpty
+	@Column(name="training_location_name")
 	private String trainingLocationName;
 
 	public TrainingLocation() {
