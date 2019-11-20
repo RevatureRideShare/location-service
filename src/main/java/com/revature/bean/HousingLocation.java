@@ -15,52 +15,51 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-
- //! Authors: Roberto Rodriguez, Erik Haklar, Jane Shin
- //! This object's purpose is to hold a housing location, its fields consist of:
- //! locationID: a location id in which the object can be grabbed by this id
- //! address1: an address pertaining to that location
- //! address2:  a second address which is optional (apt number, building number, etc)
- //! city: a city for narrowing down specific locations
- //! state: a state for narrowing down specific locations
- //! zipCode: a zipcode for narrowing down specific locations
- //! housingLocationName: housing location name to identify a location with
- //! trainingLocation: a TrainingLocation object in which that consists of the training location name and its respective training location id
+//! Authors: Roberto Rodriguez, Erik Haklar, Jane Shin
+//! This object's purpose is to hold a housing location, its fields consist of:
+//! locationID: a location id in which the object can be grabbed by this id
+//! address1: an address pertaining to that location
+//! address2:  a second address which is optional (apt number, building number, etc)
+//! city: a city for narrowing down specific locations
+//! state: a state for narrowing down specific locations
+//! zipCode: a zipcode for narrowing down specific locations
+//! housingLocationName: housing location name to identify a location with
+//! trainingLocation: a TrainingLocation object in which that consists of the training location name and its respective training location id
 
 @Entity
 @Table(name = "housing_location")
 public class HousingLocation {
 
 	@Id
-	@SequenceGenerator(name = "HLI_SEQ", sequenceName = "location_id_seq")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HLI_SEQ")
+	@SequenceGenerator(name = "HLI_SEQ", sequenceName = "location_id_seq", allocationSize=1)
 	@Column(name = "location_id")
 	private UUID locationID;
 
-	@Column(name = "address_1")
 	@NotEmpty
+	@Column(name = "address_1")
 	private String address1;
 
 	@Column(name = "address_2")
 	private String address2;
-
-	@Column(name = "city")
+	
 	@NotEmpty
 	@Size(max = 50)
+	@Column(name = "city")
 	private String city;
 
-	@Column(name = "state")
 	@NotEmpty
 	@Size(max = 50)
+	@Column(name = "state")
 	private String state;
 
-	@Column(name = "zip_code")
 	@NotEmpty
 	@Size(max = 10)
+	@Column(name = "zip_code")
 	private String zipCode;
 
-	@Column(name = "housing_location_name")
 	@NotEmpty
+	@Column(name = "housing_location_name")
 	private String housingLocationName;
 
 	@ManyToOne
