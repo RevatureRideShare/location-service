@@ -13,15 +13,18 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-/*
- * @Authors: Roberto Rodriguez, Erik Haklar, Jane Shin. This object's purpose is to hold a housing
- * location, its fields consist of: locationID: a location id in which the object can be grabbed by
- * this id address1: an address pertaining to that location address2: a second address which is
- * optional (apt number, building number, etc) city: a city for narrowing down specific locations
- * state: a state for narrowing down specific locations zipCode: a zipcode for narrowing down
- * specific locations housingLocationName: housing location name to identify a location with
- * trainingLocation: a TrainingLocation object in which that consists of the training location name
- * and its respective training location id
+/**
+ * This object's purpose is to hold a housing location, its fields consist of: locationID: a
+ * location id in which the object can be grabbed by this id address1: an address pertaining to that
+ * location address2: a second address which is optional (apt number, building number, etc) city: a
+ * city for narrowing down specific locations state: a state for narrowing down specific locations
+ * zipCode: a zipcode for narrowing down specific locations housingLocationName: housing location
+ * name to identify a location with trainingLocation: a TrainingLocation object in which that
+ * consists of the training location name and its respective training location id.
+ * 
+ * @author Roberto Rodriguez
+ * @author Erik Haklar
+ * @author Jane Shin
  */
 @Entity
 @Table(name = "housing_location")
