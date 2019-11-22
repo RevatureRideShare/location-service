@@ -12,7 +12,7 @@ import javax.validation.constraints.NotEmpty;
 
 /**
  * This objects purpose is to hold a training location. Its fields consist of: trainingLocationID:
- * an id used to identify each training location trainingLocationName: a string used to hold the
+ * an id used to identify each training location; trainingLocationName: a string used to hold the
  * name of a training location.
  * 
  * @author Erik Haklar
