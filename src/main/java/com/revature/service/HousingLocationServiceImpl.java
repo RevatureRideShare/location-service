@@ -2,10 +2,13 @@ package com.revature.service;
 
 import com.revature.bean.HousingLocation;
 import com.revature.repo.HousingLocationRepo;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
 import javax.validation.ConstraintViolationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,24 +23,15 @@ public class HousingLocationServiceImpl implements HousingLocationService {
   }
 
   @Override
-  public HousingLocation createHousingLocation(HousingLocation housingLocation) {
-    try {
-      housingLocationRepo.save(housingLocation);
-    } catch (IllegalArgumentException e) {
-
-    } catch (ConstraintViolationException c) {
-
-    }
-    return housingLocation;
+  public HousingLocation createHousingLocation(HousingLocation housingLocation)
+      throws IllegalArgumentException, ConstraintViolationException {
+    return housingLocationRepo.save(housingLocation);
   }
 
   @Override
-  public void deleteHousingLocation(HousingLocation housingLocation) {
-    try {
-      housingLocationRepo.delete(housingLocation);
-    } catch (IllegalArgumentException e) {
-
-    }
+  public void deleteHousingLocation(HousingLocation housingLocation)
+      throws IllegalArgumentException {
+    housingLocationRepo.delete(housingLocation);
   }
 
   @Override
@@ -46,20 +40,14 @@ public class HousingLocationServiceImpl implements HousingLocationService {
   }
 
   @Override
-  public HousingLocation updateHousingLocation(HousingLocation housingLocation) {
-    try {
-      housingLocationRepo.save(housingLocation);
-    } catch (IllegalArgumentException e) {
-
-    } catch (ConstraintViolationException c) {
-
-    }
-    return housingLocation;
+  public HousingLocation updateHousingLocation(HousingLocation housingLocation)
+      throws IllegalArgumentException, ConstraintViolationException {
+    return housingLocationRepo.save(housingLocation);
   }
 
   @Override
   public List<HousingLocation> getAllHousingLocations() {
-    return null;
+    return housingLocationRepo.findAll();
   }
 
 }

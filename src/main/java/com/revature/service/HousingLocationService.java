@@ -1,21 +1,27 @@
 package com.revature.service;
 
 import com.revature.bean.HousingLocation;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+import javax.validation.ConstraintViolationException;
 
 
 
 public interface HousingLocationService {
 
-  public HousingLocation createHousingLocation(HousingLocation housingLocation);
+  public HousingLocation createHousingLocation(HousingLocation housingLocation)
+      throws IllegalArgumentException, ConstraintViolationException;
 
-  public void deleteHousingLocation(HousingLocation housingLocation);
+  public void deleteHousingLocation(HousingLocation housingLocation)
+      throws IllegalArgumentException;
 
   public Optional<HousingLocation> getHousingLocation(UUID locationID);
 
-  public HousingLocation updateHousingLocation(HousingLocation housingLocation);
+  public HousingLocation updateHousingLocation(HousingLocation housingLocation)
+      throws IllegalArgumentException, ConstraintViolationException;
 
   public List<HousingLocation> getAllHousingLocations();
 }
