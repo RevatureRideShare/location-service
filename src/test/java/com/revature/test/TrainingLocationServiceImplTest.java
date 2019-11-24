@@ -161,4 +161,9 @@ class TrainingLocationServiceImplTest {
     when(trainingLocationRepo.findAll()).thenReturn(existingTLocationList);
     assertEquals(existingTLocationList, trainingLocationServiceImpl.getAllTrainingLocations());
   }
+
+  @Test
+  void testDeleteNewTrainingLocation() {
+    when(trainingLocationRepo.delete(newTrainingLocation))
+  }
 }
