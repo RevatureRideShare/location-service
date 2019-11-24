@@ -62,22 +62,6 @@ class TrainingLocationServiceImplTest {
     nullTrainingLocation = null;
 
     badFormatTrainingLocation = new TrainingLocation(2, "");
-
-
-
-    /*
-     * when(trainingLocationRepo.findById(existingTrainingLocation.getTrainingLocationID()))
-     * .thenReturn(Optional.of(existingTrainingLocation));
-     */
-
-
-    /*
-     * when(trainingLocationRepo.save(badFormatTrainingLocation))
-     * .thenThrow(ConstraintViolationException.class); // delete
-     * when(trainingLocationRepo.findById(badFormatTrainingLocation.getTrainingLocationID()))
-     * .thenThrow(___);
-     */
-
   }
 
   @AfterEach
@@ -102,8 +86,6 @@ class TrainingLocationServiceImplTest {
 
   }
 
-
-
   @Test
   void testCreateNullTrainingLocation() {
     when(trainingLocationRepo.save(nullTrainingLocation)).thenThrow(IllegalArgumentException.class);
@@ -122,16 +104,15 @@ class TrainingLocationServiceImplTest {
   }
 
   @Test
-  void testFindByIdNewTrainingLocation() {
+  void testGetNewTrainingLocation() {
     when(trainingLocationRepo.findById(newTrainingLocation.getTrainingLocationID()))
         .thenReturn(Optional.empty());
     assertEquals(Optional.empty(), trainingLocationServiceImpl
         .getTrainingLocation(newTrainingLocation.getTrainingLocationID()));
-
   }
 
   @Test
-  void testFindByIdExistingTrainingLocation() {
+  void testGetExistingTrainingLocation() {
     when(trainingLocationRepo.findById(existingTrainingLocation.getTrainingLocationID()))
         .thenReturn(Optional.of(existingTrainingLocation));
     assertEquals(Optional.of(existingTrainingLocation), trainingLocationServiceImpl
@@ -139,15 +120,15 @@ class TrainingLocationServiceImplTest {
   }
 
   @Test
-  void testFindByIdNullTrainingLocation() {
-    when(trainingLocationRepo.findById(null)).thenThrow(NullPointerException.class);
+  void testGetNullTrainingLocation() {
+    when(trainingLocationRepo.findById(null)).thenThrow(IllegalArgumentException.class);
     Assertions.assertThrows(NullPointerException.class, () -> {
       trainingLocationServiceImpl.getTrainingLocation(nullTrainingLocation.getTrainingLocationID());
     });
   }
 
   @Test
-  void testFindByIdBadFormatTrainingLocation() {
+  void testGetBadFormatTrainingLocation() {
     when(trainingLocationRepo.findById(badFormatTrainingLocation.getTrainingLocationID()))
         .thenReturn(Optional.empty());
     assertEquals(Optional.empty(), trainingLocationServiceImpl
@@ -155,7 +136,7 @@ class TrainingLocationServiceImplTest {
   }
 
   @Test
-  void testTrainingLocationList() {
+  void testGetAllTrainingLocations() {
     List<TrainingLocation> existingTLocationList = new ArrayList<>();
     existingTLocationList.add(existingTrainingLocation);
     when(trainingLocationRepo.findAll()).thenReturn(existingTLocationList);
@@ -164,6 +145,37 @@ class TrainingLocationServiceImplTest {
 
   @Test
   void testDeleteNewTrainingLocation() {
-    when(trainingLocationRepo.delete(newTrainingLocation))
+    List<TrainingLocation> existingList = trainingLocationServiceImpl.getAllTrainingLocations();
+    trainingLocationServiceImpl.deleteTrainingLocation(newTrainingLocation);
+    List<TrainingLocation> afterDeletingList =
+        trainingLocationServiceImpl.getAllTrainingLocations();
+
+    assertEquals(existingList, afterDeletingList);
+    verify(trainingLocationRepo).delete(newTrainingLocation);
+  }
+
+  @Test
+  void testDeleteExistingTrainingLocation() {
+    List<TrainingLocation> existingList = trainingLocationServiceImpl.getAllTrainingLocations();
+    trainingLocationServiceImpl.deleteTrainingLocation(existingTrainingLocation);
+    List<TrainingLocation> afterDeletingList =
+        trainingLocationServiceImpl.getAllTrainingLocations();
+    existingList.remove(existingTrainingLocation);
+
+    assertEquals(existingList, afterDeletingList);
+    verify(trainingLocationRepo).delete(existingTrainingLocation);
+  }
+
+  @Test
+  void testDeleteNullTrainingLocation() {
+    Assertions.assertThrows(IllegalArgumentException.class, () -> {
+      trainingLocationServiceImpl.deleteTrainingLocation(nullTrainingLocation);
+    });
+
+  }
+
+  @Test
+  void testDeleteBadFormatTrainingLocation() {
+
   }
 }
