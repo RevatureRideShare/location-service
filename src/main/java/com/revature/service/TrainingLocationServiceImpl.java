@@ -5,11 +5,11 @@ import com.revature.repo.TrainingLocationRepo;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import javax.validation.ConstraintViolationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,7 +25,11 @@ public class TrainingLocationServiceImpl implements TrainingLocationService {
   @Override
   public TrainingLocation createTrainingLocation(TrainingLocation trainingLocation)
       throws IllegalArgumentException, ConstraintViolationException {
-    return trainingLocationRepo.save(trainingLocation);
+    if (trainingLocationRepo.findById(trainingLocation.getTrainingLocationID()).isPresent()) {
+      throw new DuplicateKeyException("Object already exists in database");
+    } else {
+      return trainingLocationRepo.save(trainingLocation);
+    }
   }
 
   @Override
@@ -35,7 +39,7 @@ public class TrainingLocationServiceImpl implements TrainingLocationService {
   }
 
   @Override
-  public Optional<TrainingLocation> getTrainingLocation(UUID trainingLocationID) {
+  public Optional<TrainingLocation> getTrainingLocation(int trainingLocationID) {
     return trainingLocationRepo.findById(trainingLocationID);
   }
 

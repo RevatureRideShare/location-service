@@ -5,7 +5,6 @@ import com.revature.repo.HousingLocationRepo;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import javax.validation.ConstraintViolationException;
 
@@ -35,7 +34,7 @@ public class HousingLocationServiceImpl implements HousingLocationService {
   }
 
   @Override
-  public Optional<HousingLocation> getHousingLocation(UUID locationID) {
+  public Optional<HousingLocation> getHousingLocation(int locationID) {
     return housingLocationRepo.findById(locationID);
   }
 

@@ -1,7 +1,5 @@
 package com.revature.bean;
 
-import java.util.UUID;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -31,7 +29,7 @@ public class TrainingLocation {
   @SequenceGenerator(name = "TLI_SEQ", sequenceName = "training_location_id_seq",
       allocationSize = 1)
   @Column(name = "training_location_id")
-  private UUID trainingLocationID;
+  private int trainingLocationID;
 
   @NotEmpty
   @Column(name = "training_location_name")
@@ -47,17 +45,17 @@ public class TrainingLocation {
    * @param trainingLocationID an id pertaining to the object
    * @param trainingLocationName the literal name to the training location
    */
-  public TrainingLocation(UUID trainingLocationID, @NotEmpty String trainingLocationName) {
+  public TrainingLocation(int trainingLocationID, @NotEmpty String trainingLocationName) {
     super();
     this.trainingLocationID = trainingLocationID;
     this.trainingLocationName = trainingLocationName;
   }
 
-  public UUID getTrainingLocationID() {
+  public int getTrainingLocationID() {
     return trainingLocationID;
   }
 
-  public void setTrainingLocationID(UUID trainingLocationID) {
+  public void setTrainingLocationID(int trainingLocationID) {
     this.trainingLocationID = trainingLocationID;
   }
 
@@ -73,7 +71,7 @@ public class TrainingLocation {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((trainingLocationID == null) ? 0 : trainingLocationID.hashCode());
+    result = prime * result + trainingLocationID;
     result =
         prime * result + ((trainingLocationName == null) ? 0 : trainingLocationName.hashCode());
     return result;
@@ -91,11 +89,7 @@ public class TrainingLocation {
       return false;
     }
     TrainingLocation other = (TrainingLocation) obj;
-    if (trainingLocationID == null) {
-      if (other.trainingLocationID != null) {
-        return false;
-      }
-    } else if (!trainingLocationID.equals(other.trainingLocationID)) {
+    if (trainingLocationID != other.trainingLocationID) {
       return false;
     }
     if (trainingLocationName == null) {

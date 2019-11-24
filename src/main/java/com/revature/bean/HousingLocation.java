@@ -1,6 +1,5 @@
 package com.revature.bean;
 
-import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -34,7 +33,7 @@ public class HousingLocation {
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HLI_SEQ")
   @SequenceGenerator(name = "HLI_SEQ", sequenceName = "location_id_seq", allocationSize = 1)
   @Column(name = "location_id")
-  private UUID locationID;
+  private int locationID;
 
   @NotEmpty
   @Column(name = "address_1")
@@ -83,7 +82,7 @@ public class HousingLocation {
    * @param housingLocationName the actual name of the location
    * @param trainingLocation the trainingLocation object that this housing location is tied to
    */
-  public HousingLocation(UUID locationID, @NotEmpty String address1, String address2,
+  public HousingLocation(int locationID, @NotEmpty String address1, String address2,
       @NotEmpty @Size(max = 50) String city, @NotEmpty @Size(max = 50) String state,
       @NotEmpty @Size(max = 10) String zipCode, @NotEmpty String housingLocationName,
       TrainingLocation trainingLocation) {
@@ -98,11 +97,11 @@ public class HousingLocation {
     this.trainingLocation = trainingLocation;
   }
 
-  public UUID getLocationID() {
+  public int getLocationID() {
     return locationID;
   }
 
-  public void setLocationID(UUID locationID) {
+  public void setLocationID(int locationID) {
     this.locationID = locationID;
   }
 
@@ -170,7 +169,7 @@ public class HousingLocation {
     result = prime * result + ((address2 == null) ? 0 : address2.hashCode());
     result = prime * result + ((city == null) ? 0 : city.hashCode());
     result = prime * result + ((housingLocationName == null) ? 0 : housingLocationName.hashCode());
-    result = prime * result + ((locationID == null) ? 0 : locationID.hashCode());
+    result = prime * result + locationID;
     result = prime * result + ((state == null) ? 0 : state.hashCode());
     result = prime * result + ((trainingLocation == null) ? 0 : trainingLocation.hashCode());
     result = prime * result + ((zipCode == null) ? 0 : zipCode.hashCode());
@@ -217,11 +216,7 @@ public class HousingLocation {
     } else if (!housingLocationName.equals(other.housingLocationName)) {
       return false;
     }
-    if (locationID == null) {
-      if (other.locationID != null) {
-        return false;
-      }
-    } else if (!locationID.equals(other.locationID)) {
+    if (locationID != other.locationID) {
       return false;
     }
     if (state == null) {
