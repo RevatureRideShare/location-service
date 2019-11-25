@@ -139,6 +139,7 @@ class TrainingLocationServiceImplTest {
   void testGetAllTrainingLocations() {
     List<TrainingLocation> existingTLocationList = new ArrayList<>();
     existingTLocationList.add(existingTrainingLocation);
+    System.out.println(trainingLocationServiceImpl.getAllTrainingLocations());
     when(trainingLocationRepo.findAll()).thenReturn(existingTLocationList);
     assertEquals(existingTLocationList, trainingLocationServiceImpl.getAllTrainingLocations());
   }
