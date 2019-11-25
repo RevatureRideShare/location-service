@@ -1,0 +1,63 @@
+package com.revature.test;
+
+import static org.junit.Assert.assertEquals;
+
+import com.revature.bean.TrainingLocation;
+import com.revature.service.TrainingLocationServiceImpl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class TrainingLocationServiceImplIntegrationTest {
+
+  private TrainingLocationServiceImpl trainingLocationServiceImpl;
+
+  private TrainingLocation existingTrainingLocation;
+
+  @Autowired
+  public void setTrainingLocationServiceImpl(
+      TrainingLocationServiceImpl trainingLocationServiceImpl) {
+    this.trainingLocationServiceImpl = trainingLocationServiceImpl;
+  }
+
+  @BeforeAll
+  static void setUpBeforeClass() throws Exception {
+
+  }
+
+  @AfterAll
+  static void tearDownAfterClass() throws Exception {
+
+  }
+
+  @BeforeEach
+  void setUp() throws Exception {
+
+    existingTrainingLocation = new TrainingLocation(3, "Existing Location");
+
+  }
+
+  @AfterEach
+  void tearDown() throws Exception {
+
+  }
+
+  @Test
+  void testGetAllTrainingLocation() {
+    List<TrainingLocation> existingTLocationList = new ArrayList<>();
+    existingTLocationList.add(existingTrainingLocation);
+    assertEquals(trainingLocationServiceImpl.getAllTrainingLocations(), existingTLocationList);
+    System.out.println(trainingLocationServiceImpl.getAllTrainingLocations());
+    // verify(trainingLocationRepo).findAll();
+  }
+
+}
