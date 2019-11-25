@@ -1,6 +1,7 @@
 package com.revature.service;
 
 import com.revature.bean.TrainingLocation;
+import com.revature.exception.UpdateNonexistentException;
 import com.revature.repo.TrainingLocationRepo;
 
 import java.util.List;
@@ -25,7 +26,8 @@ public class TrainingLocationServiceImpl implements TrainingLocationService {
   @Override
   public TrainingLocation createTrainingLocation(TrainingLocation trainingLocation)
       throws IllegalArgumentException, ConstraintViolationException {
-    if (trainingLocationRepo.findById(trainingLocation.getTrainingLocationID()).isPresent()) {
+
+    if (getTrainingLocation(trainingLocation.getTrainingLocationID()).isPresent()) {
       throw new DuplicateKeyException("Object already exists in database");
     } else {
       return trainingLocationRepo.save(trainingLocation);
@@ -46,7 +48,11 @@ public class TrainingLocationServiceImpl implements TrainingLocationService {
   @Override
   public TrainingLocation updateTrainingLocation(TrainingLocation trainingLocation)
       throws IllegalArgumentException, ConstraintViolationException {
-    return trainingLocationRepo.save(trainingLocation);
+    if (!getTrainingLocation(trainingLocation.getTrainingLocationID()).isPresent()) {
+      throw new UpdateNonexistentException(trainingLocation + " does not exist");
+    } else {
+      return trainingLocationRepo.save(trainingLocation);
+    }
   }
 
   @Override

@@ -1,10 +1,12 @@
 package com.revature.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.revature.bean.TrainingLocation;
+import com.revature.exception.UpdateNonexistentException;
 import com.revature.repo.TrainingLocationRepo;
 import com.revature.service.TrainingLocationServiceImpl;
 
@@ -79,6 +81,8 @@ class TrainingLocationServiceImplTest {
 
   @Test
   void testCreateExistingTrainingLocation() {
+    when(trainingLocationRepo.findById(existingTrainingLocation.getTrainingLocationID()))
+        .thenReturn(Optional.of(existingTrainingLocation));
     when(trainingLocationRepo.save(existingTrainingLocation)).thenReturn(existingTrainingLocation);
     Assertions.assertThrows(DuplicateKeyException.class, () -> {
       trainingLocationServiceImpl.createTrainingLocation(existingTrainingLocation);
@@ -139,6 +143,7 @@ class TrainingLocationServiceImplTest {
   void testGetAllTrainingLocations() {
     List<TrainingLocation> existingTLocationList = new ArrayList<>();
     existingTLocationList.add(existingTrainingLocation);
+
     when(trainingLocationRepo.findAll()).thenReturn(existingTLocationList);
     assertEquals(existingTLocationList, trainingLocationServiceImpl.getAllTrainingLocations());
   }
@@ -168,14 +173,72 @@ class TrainingLocationServiceImplTest {
 
   @Test
   void testDeleteNullTrainingLocation() {
+    doThrow(IllegalArgumentException.class).when(trainingLocationRepo).delete(nullTrainingLocation);
     Assertions.assertThrows(IllegalArgumentException.class, () -> {
       trainingLocationServiceImpl.deleteTrainingLocation(nullTrainingLocation);
     });
-
   }
 
   @Test
   void testDeleteBadFormatTrainingLocation() {
+    List<TrainingLocation> existingList = trainingLocationServiceImpl.getAllTrainingLocations();
+    trainingLocationServiceImpl.deleteTrainingLocation(badFormatTrainingLocation);
+    List<TrainingLocation> afterDeletingList =
+        trainingLocationServiceImpl.getAllTrainingLocations();
 
+    assertEquals(existingList, afterDeletingList);
+    verify(trainingLocationRepo).delete(badFormatTrainingLocation);
   }
+
+  @Test
+  void testUpdateNewTrainingLocation() {
+    when(trainingLocationRepo.findById(newTrainingLocation.getTrainingLocationID()))
+        .thenReturn(Optional.empty());
+
+    Assertions.assertThrows(UpdateNonexistentException.class, () -> {
+      trainingLocationServiceImpl.updateTrainingLocation(new TrainingLocation(
+          newTrainingLocation.getTrainingLocationID(), "Updated New Location"));
+    });
+  }
+
+  @Test
+  void testUpdateExistingTrainingLocation() {
+    TrainingLocation updatedExistingLocation = new TrainingLocation(
+        existingTrainingLocation.getTrainingLocationID(), "Updated Existing Location");
+
+    when(trainingLocationRepo.findById(updatedExistingLocation.getTrainingLocationID()))
+        .thenReturn(Optional.of(updatedExistingLocation));
+
+    when(trainingLocationRepo.save(updatedExistingLocation)).thenReturn(updatedExistingLocation);
+
+    assertEquals(updatedExistingLocation,
+        trainingLocationServiceImpl.updateTrainingLocation(updatedExistingLocation));
+
+    verify(trainingLocationRepo).save(updatedExistingLocation);
+  }
+
+  @Test
+  void testUpdateNullTrainingLocation() {
+    when(trainingLocationRepo.save(nullTrainingLocation)).thenThrow(IllegalArgumentException.class);
+    Assertions.assertThrows(NullPointerException.class, () -> {
+      trainingLocationServiceImpl.updateTrainingLocation(nullTrainingLocation);
+    });
+  }
+
+  @Test
+  void testUpdateBadFormatTrainingLocation() {
+    TrainingLocation updatedBadLocation =
+        new TrainingLocation(existingTrainingLocation.getTrainingLocationID(), "");
+
+    when(trainingLocationRepo.findById(updatedBadLocation.getTrainingLocationID()))
+        .thenReturn(Optional.of(updatedBadLocation));
+
+    when(trainingLocationRepo.save(updatedBadLocation))
+        .thenThrow(ConstraintViolationException.class);
+
+    Assertions.assertThrows(ConstraintViolationException.class, () -> {
+      trainingLocationServiceImpl.updateTrainingLocation(updatedBadLocation);
+    });
+  }
+
 }
