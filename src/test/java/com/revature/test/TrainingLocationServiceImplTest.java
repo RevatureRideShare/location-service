@@ -1,11 +1,11 @@
 package com.revature.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.revature.bean.TrainingLocation;
+import com.revature.exception.DeleteNonexistentException;
 import com.revature.exception.UpdateNonexistentException;
 import com.revature.repo.TrainingLocationRepo;
 import com.revature.service.TrainingLocationServiceImpl;
@@ -29,7 +29,6 @@ import org.springframework.dao.DuplicateKeyException;
 
 @SpringBootTest
 class TrainingLocationServiceImplTest {
-
 
   @Mock
   private TrainingLocationRepo trainingLocationRepo;
@@ -75,6 +74,8 @@ class TrainingLocationServiceImplTest {
 
   @Test
   void testCreateNewTrainingLocation() {
+    when(trainingLocationRepo.findById(newTrainingLocation.getTrainingLocationID()))
+        .thenReturn(Optional.empty());
     when(trainingLocationRepo.save(newTrainingLocation)).thenReturn(newTrainingLocation);
     assertEquals(newTrainingLocation,
         trainingLocationServiceImpl.createTrainingLocation(newTrainingLocation));
@@ -85,7 +86,6 @@ class TrainingLocationServiceImplTest {
   void testCreateExistingTrainingLocation() {
     when(trainingLocationRepo.findById(existingTrainingLocation.getTrainingLocationID()))
         .thenReturn(Optional.of(existingTrainingLocation));
-    when(trainingLocationRepo.save(existingTrainingLocation)).thenReturn(existingTrainingLocation);
     Assertions.assertThrows(DuplicateKeyException.class, () -> {
       trainingLocationServiceImpl.createTrainingLocation(existingTrainingLocation);
     });
@@ -151,17 +151,17 @@ class TrainingLocationServiceImplTest {
 
   @Test
   void testDeleteNewTrainingLocation() {
-    List<TrainingLocation> existingList = trainingLocationServiceImpl.getAllTrainingLocations();
-    trainingLocationServiceImpl.deleteTrainingLocation(newTrainingLocation);
-    List<TrainingLocation> afterDeletingList =
-        trainingLocationServiceImpl.getAllTrainingLocations();
-
-    assertEquals(existingList, afterDeletingList);
-    verify(trainingLocationRepo).delete(newTrainingLocation);
+    when(trainingLocationRepo.findById(newTrainingLocation.getTrainingLocationID()))
+        .thenReturn(Optional.empty());
+    Assertions.assertThrows(DeleteNonexistentException.class, () -> {
+      trainingLocationServiceImpl.deleteTrainingLocation(newTrainingLocation);
+    });
   }
 
   @Test
   void testDeleteExistingTrainingLocation() {
+    when(trainingLocationRepo.findById(existingTrainingLocation.getTrainingLocationID()))
+        .thenReturn(Optional.of(existingTrainingLocation));
     List<TrainingLocation> existingList = trainingLocationServiceImpl.getAllTrainingLocations();
     trainingLocationServiceImpl.deleteTrainingLocation(existingTrainingLocation);
     List<TrainingLocation> afterDeletingList =
@@ -174,21 +174,18 @@ class TrainingLocationServiceImplTest {
 
   @Test
   void testDeleteNullTrainingLocation() {
-    doThrow(IllegalArgumentException.class).when(trainingLocationRepo).delete(nullTrainingLocation);
-    Assertions.assertThrows(IllegalArgumentException.class, () -> {
+    Assertions.assertThrows(NullPointerException.class, () -> {
       trainingLocationServiceImpl.deleteTrainingLocation(nullTrainingLocation);
     });
   }
 
   @Test
   void testDeleteBadFormatTrainingLocation() {
-    List<TrainingLocation> existingList = trainingLocationServiceImpl.getAllTrainingLocations();
-    trainingLocationServiceImpl.deleteTrainingLocation(badFormatTrainingLocation);
-    List<TrainingLocation> afterDeletingList =
-        trainingLocationServiceImpl.getAllTrainingLocations();
-
-    assertEquals(existingList, afterDeletingList);
-    verify(trainingLocationRepo).delete(badFormatTrainingLocation);
+    when(trainingLocationRepo.findById(badFormatTrainingLocation.getTrainingLocationID()))
+        .thenReturn(Optional.empty());
+    Assertions.assertThrows(DeleteNonexistentException.class, () -> {
+      trainingLocationServiceImpl.deleteTrainingLocation(badFormatTrainingLocation);
+    });
   }
 
   @Test
@@ -208,7 +205,7 @@ class TrainingLocationServiceImplTest {
         existingTrainingLocation.getTrainingLocationID(), "Updated Existing Location");
 
     when(trainingLocationRepo.findById(updatedExistingLocation.getTrainingLocationID()))
-        .thenReturn(Optional.of(updatedExistingLocation));
+        .thenReturn(Optional.of(existingTrainingLocation));
 
     when(trainingLocationRepo.save(updatedExistingLocation)).thenReturn(updatedExistingLocation);
 
@@ -220,7 +217,6 @@ class TrainingLocationServiceImplTest {
 
   @Test
   void testUpdateNullTrainingLocation() {
-    when(trainingLocationRepo.save(nullTrainingLocation)).thenThrow(IllegalArgumentException.class);
     Assertions.assertThrows(NullPointerException.class, () -> {
       trainingLocationServiceImpl.updateTrainingLocation(nullTrainingLocation);
     });
@@ -232,7 +228,7 @@ class TrainingLocationServiceImplTest {
         new TrainingLocation(existingTrainingLocation.getTrainingLocationID(), "");
 
     when(trainingLocationRepo.findById(updatedBadLocation.getTrainingLocationID()))
-        .thenReturn(Optional.of(updatedBadLocation));
+        .thenReturn(Optional.of(existingTrainingLocation));
 
     when(trainingLocationRepo.save(updatedBadLocation))
         .thenThrow(ConstraintViolationException.class);

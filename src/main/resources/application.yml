@@ -1,7 +1,6 @@
 server:
   port: 8089
-
-spring: 
+spring:
   application:
     name: location-service
   cloud:
@@ -9,3 +8,4 @@ spring:
       uri: http://localhost:8888 
 
     
+

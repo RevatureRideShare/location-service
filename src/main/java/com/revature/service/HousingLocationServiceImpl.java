@@ -1,6 +1,7 @@
 package com.revature.service;
 
 import com.revature.bean.HousingLocation;
+import com.revature.exception.DeleteNonexistentException;
 import com.revature.exception.UpdateNonexistentException;
 import com.revature.repo.HousingLocationRepo;
 
@@ -36,7 +37,12 @@ public class HousingLocationServiceImpl implements HousingLocationService {
   @Override
   public void deleteHousingLocation(HousingLocation housingLocation)
       throws IllegalArgumentException {
-    housingLocationRepo.delete(housingLocation);
+    if (!getHousingLocation(housingLocation.getLocationID()).isPresent()) {
+      throw new DeleteNonexistentException(
+          housingLocation + " does not exist and cannot be deleted");
+    } else {
+      housingLocationRepo.delete(housingLocation);
+    }
   }
 
   @Override
