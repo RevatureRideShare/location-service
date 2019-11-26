@@ -31,7 +31,7 @@ public class TrainingLocation {
   @Column(name = "training_location_id")
   private int trainingLocationID;
 
-  @NotEmpty
+  @NotEmpty(message = "Training Location Name cannot be empty!")
   @Column(name = "training_location_name")
   private String trainingLocationName;
 

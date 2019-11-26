@@ -4,6 +4,7 @@ server:
 spring: 
   application:
     name: location-service
+
   jpa:
     properties:
       hibernate:
@@ -11,5 +12,6 @@ spring:
   database:          
   datasource:
     url: jdbc:postgresql://${RIDESHARE_POSTGRES_1909_URL}:5432/postgres?
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    username: ${RIDESHARE_POSTGRES_1909_USERNAME}
+    password: ${RIDESHARE_POSTGRES_1909_PASSWORD} 
+    

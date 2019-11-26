@@ -30,6 +30,7 @@ import org.springframework.dao.DuplicateKeyException;
 @SpringBootTest
 class TrainingLocationServiceImplTest {
 
+
   @Mock
   private TrainingLocationRepo trainingLocationRepo;
 
@@ -64,6 +65,7 @@ class TrainingLocationServiceImplTest {
     nullTrainingLocation = null;
 
     badFormatTrainingLocation = new TrainingLocation(2, "");
+
   }
 
   @AfterEach
