@@ -17,7 +17,7 @@ training_location_id numeric references training_location(training_location_id)
 create sequence training_location_id_seq;
 create sequence location_id_seq;
 
-drop sequence training_location_id_seq;
-drop sequence location_id_seq;
+--drop sequence training_location_id_seq;
+--drop sequence location_id_seq;
 
 insert into training_location values(3,'Existing Location');
