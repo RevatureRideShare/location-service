@@ -91,4 +91,10 @@ class TrainingLocationServiceImplIntegrationTest {
       trainingLocationServiceImpl.createTrainingLocation(existingTrainingLocation);
     });
   }
+
+  @Test
+  void testDeleteExistingTrainingLocation() {
+
+  }
+
 }
