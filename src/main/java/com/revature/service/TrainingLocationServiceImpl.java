@@ -1,6 +1,7 @@
 package com.revature.service;
 
 import com.revature.bean.TrainingLocation;
+import com.revature.exception.DeleteNonexistentException;
 import com.revature.exception.UpdateNonexistentException;
 import com.revature.repo.TrainingLocationRepo;
 
@@ -37,7 +38,12 @@ public class TrainingLocationServiceImpl implements TrainingLocationService {
   @Override
   public void deleteTrainingLocation(TrainingLocation trainingLocation)
       throws IllegalArgumentException {
-    trainingLocationRepo.delete(trainingLocation);
+    if (!getTrainingLocation(trainingLocation.getTrainingLocationID()).isPresent()) {
+      throw new DeleteNonexistentException(
+          trainingLocation + " does not exist and cannot be deleted");
+    } else {
+      trainingLocationRepo.delete(trainingLocation);
+    }
   }
 
   @Override
@@ -49,7 +55,8 @@ public class TrainingLocationServiceImpl implements TrainingLocationService {
   public TrainingLocation updateTrainingLocation(TrainingLocation trainingLocation)
       throws IllegalArgumentException, ConstraintViolationException {
     if (!getTrainingLocation(trainingLocation.getTrainingLocationID()).isPresent()) {
-      throw new UpdateNonexistentException(trainingLocation + " does not exist");
+      throw new UpdateNonexistentException(
+          trainingLocation + " does not exist and cannot be updated");
     } else {
       return trainingLocationRepo.save(trainingLocation);
     }
