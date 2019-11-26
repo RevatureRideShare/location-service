@@ -13,5 +13,6 @@ spring:
   datasource:
     url: jdbc:postgresql://${RIDESHARE_POSTGRES_1909_URL}:5432/postgres?
     username: ${RIDESHARE_POSTGRES_1909_USERNAME}
-    password: ${RIDESHARE_POSTGRES_1909_PASSWORD} 
+    password: ${RIDESHARE_POSTGRES_1909_PASSWORD}
+
     

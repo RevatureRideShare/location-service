@@ -1,6 +1,7 @@
 package com.revature.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.revature.bean.TrainingLocation;
 import com.revature.service.TrainingLocationServiceImpl;
@@ -19,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.rules.ExpectedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DuplicateKeyException;
 
 @SpringBootTest
 class TrainingLocationServiceImplIntegrationTest {
@@ -62,8 +64,8 @@ class TrainingLocationServiceImplIntegrationTest {
   void testGetAllTrainingLocation() {
     List<TrainingLocation> existingTLocationList = new ArrayList<>();
     existingTLocationList.add(existingTrainingLocation);
-    assertEquals(trainingLocationServiceImpl.getAllTrainingLocations(),
-        trainingLocationServiceImpl.getAllTrainingLocations());
+    assertEquals(trainingLocationServiceImpl.getAllTrainingLocations(), existingTLocationList);
+
     System.out.println(trainingLocationServiceImpl.getAllTrainingLocations());
   }
 
@@ -81,5 +83,12 @@ class TrainingLocationServiceImplIntegrationTest {
         new TrainingLocation(11, "This is the new Training Location");
     assertEquals(trainingLocationServiceImpl.createTrainingLocation(newTrainingLocation),
         newTrainingLocation);
+  }
+
+  @Test
+  void testCreateExistingTrainingLocation() {
+    assertThrows(DuplicateKeyException.class, () -> {
+      trainingLocationServiceImpl.createTrainingLocation(existingTrainingLocation);
+    });
   }
 }
