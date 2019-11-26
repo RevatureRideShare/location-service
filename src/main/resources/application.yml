@@ -4,15 +4,8 @@ server:
 spring: 
   application:
     name: location-service
-
-  jpa:
-    properties:
-      hibernate:
-        default_schema: ${RIDESHARE_POSTGRES_1909_SCHEMA}    
-  database:          
-  datasource:
-    url: jdbc:postgresql://${RIDESHARE_POSTGRES_1909_URL}:5432/postgres?
-    username: ${RIDESHARE_POSTGRES_1909_USERNAME}
-    password: ${RIDESHARE_POSTGRES_1909_PASSWORD}
+  cloud:
+    config:
+      uri: http://localhost:8888 
 
     
