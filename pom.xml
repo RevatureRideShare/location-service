@@ -117,8 +117,12 @@
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-config-client -->
 		<dependency>
-    		<groupId>org.springframework.cloud</groupId>
-    		<artifactId>spring-cloud-starter-config</artifactId>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-config</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
 		</dependency>
 	</dependencies>
 
