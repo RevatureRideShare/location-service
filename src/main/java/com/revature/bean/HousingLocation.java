@@ -10,6 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -61,6 +62,7 @@ public class HousingLocation {
   @Column(name = "housing_location_name")
   private String housingLocationName;
 
+  @NotNull
   @ManyToOne
   @JoinColumn(name = "training_location_id")
   private TrainingLocation trainingLocation;
