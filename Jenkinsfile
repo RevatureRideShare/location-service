@@ -25,7 +25,7 @@ pipeline {
 
         stage ('Test') {
             steps {
-            	sh 'mvn verify checkstyle:checkstyle'
+            	//sh 'mvn verify checkstyle:checkstyle'
             	withSonarQubeEnv(credentialsId: 'b44ffadc-08d5-11ea-8d71-362b9e155667', installationName:'SonarCloud'){
                 	sh '''
                     export SONAR_SCANNER_VERSION=4.2.0.1873
