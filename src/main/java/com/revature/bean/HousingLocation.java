@@ -35,7 +35,7 @@ public class HousingLocation {
   @Column(name = "location_id")
   private int locationID;
 
-  @NotEmpty
+  @NotEmpty(message = "Cannot be empty!")
   @Column(name = "address_1")
   private String address1;
 

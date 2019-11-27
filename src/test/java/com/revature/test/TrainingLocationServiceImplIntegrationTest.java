@@ -4,12 +4,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.revature.bean.TrainingLocation;
+import com.revature.exception.DeleteNonexistentException;
+import com.revature.exception.UpdateNonexistentException;
 import com.revature.service.TrainingLocationServiceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.persistence.RollbackException;
+import java.util.Optional;
 
 import org.junit.Rule;
 import org.junit.jupiter.api.AfterAll;
@@ -21,6 +22,7 @@ import org.junit.rules.ExpectedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.transaction.TransactionSystemException;
 
 @SpringBootTest
 class TrainingLocationServiceImplIntegrationTest {
@@ -29,8 +31,12 @@ class TrainingLocationServiceImplIntegrationTest {
   ExpectedException expectedEx = ExpectedException.none();
 
   private TrainingLocationServiceImpl trainingLocationServiceImpl;
-
   private TrainingLocation existingTrainingLocation;
+  private TrainingLocation updatedTrainingLocation;
+  private TrainingLocation nullTrainingLocation;
+  private TrainingLocation nonExistingTrainingLocation;
+  private TrainingLocation changedTrainingLocation;
+  private TrainingLocation newTrainingLocation;
 
   @Autowired
   public void setTrainingLocationServiceImpl(
@@ -50,9 +56,12 @@ class TrainingLocationServiceImplIntegrationTest {
 
   @BeforeEach
   void setUp() throws Exception {
-
+    nullTrainingLocation = null;
     existingTrainingLocation = new TrainingLocation(3, "Existing Location");
-
+    updatedTrainingLocation = new TrainingLocation(6, "Its Not Updated");
+    nonExistingTrainingLocation = new TrainingLocation(999, "I Dont Exist");
+    changedTrainingLocation = new TrainingLocation(6, "Its now updated!");
+    newTrainingLocation = new TrainingLocation(11, "New Training Location");
   }
 
   @AfterEach
@@ -61,9 +70,17 @@ class TrainingLocationServiceImplIntegrationTest {
   }
 
   @Test
+  void testGetExistingTrainingLocationById() {
+    assertEquals(
+        trainingLocationServiceImpl
+            .getTrainingLocation(existingTrainingLocation.getTrainingLocationID()),
+        Optional.of(existingTrainingLocation));
+  }
+
+  @Test
   void testGetAllTrainingLocation() {
     List<TrainingLocation> existingTLocationList = new ArrayList<>();
-    existingTLocationList.add(existingTrainingLocation);
+    existingTLocationList.add(changedTrainingLocation);
     assertEquals(trainingLocationServiceImpl.getAllTrainingLocations(), existingTLocationList);
 
     System.out.println(trainingLocationServiceImpl.getAllTrainingLocations());
@@ -71,18 +88,19 @@ class TrainingLocationServiceImplIntegrationTest {
 
   @Test
   void testCreateBadFormatTrainingLocation() {
-    expectedEx.expect(RollbackException.class);
-    expectedEx.expectMessage("Training Location Name cannot be empty!");
     TrainingLocation badFormatTrainingLocation = new TrainingLocation(5, "");
-    trainingLocationServiceImpl.createTrainingLocation(badFormatTrainingLocation);
+    assertThrows(TransactionSystemException.class, () -> {
+      trainingLocationServiceImpl.createTrainingLocation(badFormatTrainingLocation);
+    });
+
   }
 
   @Test
   void testCreateNewTrainingLocation() {
-    TrainingLocation newTrainingLocation =
-        new TrainingLocation(11, "This is the new Training Location");
-    assertEquals(trainingLocationServiceImpl.createTrainingLocation(newTrainingLocation),
-        newTrainingLocation);
+    TrainingLocation extraNewTraingingLocation =
+        trainingLocationServiceImpl.createTrainingLocation(newTrainingLocation);
+    assertEquals(Optional.of(extraNewTraingingLocation), trainingLocationServiceImpl
+        .getTrainingLocation(extraNewTraingingLocation.getTrainingLocationID()));
   }
 
   @Test
@@ -93,8 +111,40 @@ class TrainingLocationServiceImplIntegrationTest {
   }
 
   @Test
+  void testCreateNullTrainingLocation() {
+    assertThrows(NullPointerException.class, () -> {
+      trainingLocationServiceImpl.createTrainingLocation(nullTrainingLocation);
+    });
+  }
+
+  @Test
   void testDeleteExistingTrainingLocation() {
+    trainingLocationServiceImpl.deleteTrainingLocation(existingTrainingLocation);
+    assertEquals(trainingLocationServiceImpl
+        .getTrainingLocation(existingTrainingLocation.getTrainingLocationID()), Optional.empty());
+  }
+
+  @Test
+  void testDeleteNonExistingTrainingLocation() {
+    assertThrows(DeleteNonexistentException.class, () -> {
+      trainingLocationServiceImpl.deleteTrainingLocation(nonExistingTrainingLocation);
+    });
 
   }
 
+  @Test
+  void testUpdateExistingTrainingLocation() {
+    System.out.println("Current state of updatedTrainingLocation" + trainingLocationServiceImpl
+        .getTrainingLocation(updatedTrainingLocation.getTrainingLocationID()));
+    trainingLocationServiceImpl.updateTrainingLocation(changedTrainingLocation);
+    assertEquals(trainingLocationServiceImpl.getTrainingLocation(
+        changedTrainingLocation.getTrainingLocationID()), Optional.of(changedTrainingLocation));
+  }
+
+  @Test
+  void testUpdateNonExistingTrainingLocation() {
+    assertThrows(UpdateNonexistentException.class, () -> {
+      trainingLocationServiceImpl.updateTrainingLocation(nonExistingTrainingLocation);
+    });
+  }
 }
