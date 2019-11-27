@@ -19,5 +19,3 @@ create sequence location_id_seq;
 
 --drop sequence training_location_id_seq;
 --drop sequence location_id_seq;
-
-insert into training_location values(3,'Existing Location');
