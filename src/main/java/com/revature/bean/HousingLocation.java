@@ -35,29 +35,29 @@ public class HousingLocation {
   @Column(name = "location_id")
   private int locationID;
 
-  @NotEmpty(message = "Cannot be empty!")
+  @NotEmpty(message = "Address1 cannot be empty!")
   @Column(name = "address_1")
   private String address1;
 
   @Column(name = "address_2")
   private String address2;
 
-  @NotEmpty
-  @Size(max = 50)
+  @NotEmpty(message = "City cannot be empty!")
+  @Size(max = 50, message = "City cannot be more than 50 chars!")
   @Column(name = "city")
   private String city;
 
-  @NotEmpty
-  @Size(max = 50)
+  @NotEmpty(message = "State cannot be empty!")
+  @Size(max = 50, message = "State cannot be more than 50 chars!")
   @Column(name = "state")
   private String state;
 
-  @NotEmpty
-  @Size(max = 10)
+  @NotEmpty(message = "Zipcode cannot be empty!")
+  @Size(max = 10, message = "Zipcode cannot be more than 10 chars")
   @Column(name = "zip_code")
   private String zipCode;
 
-  @NotEmpty
+  @NotEmpty(message = "Housing Location Name cannot be empty!")
   @Column(name = "housing_location_name")
   private String housingLocationName;
 

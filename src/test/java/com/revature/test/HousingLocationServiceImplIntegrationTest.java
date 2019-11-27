@@ -33,8 +33,19 @@ class HousingLocationServiceImplIntegrationTest {
   private HousingLocation updatedHousingLocation;
   private HousingLocation changedHousingLocation;
   private TrainingLocation existingTrainingLocation;
+  private TrainingLocation nullTrainingLocation;
+  private TrainingLocation emptyTrainingLocation;
   private HousingLocation newHousingLocation;
   private HousingLocation badFormatAddress1HousingLocation;
+  private HousingLocation badFormatCityHousingLocation;
+  private HousingLocation badFormatCityMaxSizeHousingLocation;
+  private HousingLocation badFormatStateHousingLocation;
+  private HousingLocation badFormatStateMaxSizeHousingLocation;
+  private HousingLocation badFormatZipcodeHousingLocation;
+  private HousingLocation badFormatZipcodeMaxSizeHousingLocation;
+  private HousingLocation badFormatHousingLocationNameHousingLocation;
+  private HousingLocation housingLocationWithNullTrainingLocation;
+  private HousingLocation housingLocationWithEmptyTrainingLocation;
 
   @Autowired
   public void setHousingLocationServiceImpl(HousingLocationServiceImpl housingLocationServiceImpl) {
@@ -54,6 +65,8 @@ class HousingLocationServiceImplIntegrationTest {
   @BeforeEach
   void setUp() throws Exception {
     nullHousingLocation = null;
+    nullTrainingLocation = null;
+    emptyTrainingLocation = new TrainingLocation(3, "");
     existingTrainingLocation = new TrainingLocation(3, "Existing Location");
     existingHousingLocation = new HousingLocation(5, "13452 BB Downs", "", "Tampa", "Florida",
         "34116", "The Standard", existingTrainingLocation);
@@ -67,6 +80,26 @@ class HousingLocationServiceImplIntegrationTest {
         "34116", "Bonita Heights", existingTrainingLocation);
     badFormatAddress1HousingLocation = new HousingLocation(4, "", "", "Tampa", "Florida", "34116",
         "Bonita Heights", existingTrainingLocation);
+    badFormatCityHousingLocation = new HousingLocation(4, "13452 BB Downs", "", "", "Florida",
+        "34116", "Bonita Heights", existingTrainingLocation);
+    badFormatCityMaxSizeHousingLocation = new HousingLocation(4, "13452 BB Downs", "",
+        "ThisIsARidiculouslyLargeCityItsAbsurdlyLargeNoIdeaHowBigThisCouldGetButItNeedsToPass50",
+        "Florida", "34116", "Bonita Heights", existingTrainingLocation);
+    badFormatStateHousingLocation = new HousingLocation(4, "13452 BB Downs", "", "Tampa", "",
+        "34116", "Bonita Heights", existingTrainingLocation);
+    badFormatStateMaxSizeHousingLocation = new HousingLocation(4, "13452 BB Downs", "", "Tampa",
+        "ThisIsARidiculouslyLargeStateItsAbsurdlyLargeNoIdeaHowBigThisCouldGetButItNeedsToPass50",
+        "34116", "Bonita Heights", existingTrainingLocation);
+    badFormatZipcodeHousingLocation = new HousingLocation(4, "13452 BB Downs", "", "Tampa",
+        "Florida", "", "Bonita Heights", existingTrainingLocation);
+    badFormatZipcodeMaxSizeHousingLocation = new HousingLocation(4, "13452 BB Downs", "", "Tampa",
+        "Florida", "403392049450596655444", "Bonita Heights", existingTrainingLocation);
+    badFormatHousingLocationNameHousingLocation = new HousingLocation(4, "13452 BB Downs", "",
+        "Tampa", "Florida", "34116", "", existingTrainingLocation);
+    badFormatCityHousingLocation = new HousingLocation(4, "13452 BB Downs", "", "Tampa", "Florida",
+        "34116", "Bonita Heights", nullTrainingLocation);
+    badFormatCityHousingLocation = new HousingLocation(4, "13452 BB Downs", "", "Tampa", "Florida",
+        "34116", "Bonita Heights", emptyTrainingLocation);
   }
 
   @AfterEach
@@ -86,7 +119,6 @@ class HousingLocationServiceImplIntegrationTest {
     assertEquals(
         housingLocationServiceImpl.getHousingLocation(existingHousingLocation.getLocationID()),
         Optional.of(existingHousingLocation));
-
   }
 
   @Test
@@ -152,10 +184,73 @@ class HousingLocationServiceImplIntegrationTest {
   }
 
   @Test
-  void testCreateBadFormatAddress1() {
+  void testCreateBadFormatAddress1HousingLocation() {
     assertThrows(TransactionSystemException.class, () -> {
       housingLocationServiceImpl.createHousingLocation(badFormatAddress1HousingLocation);
     });
   }
 
+  @Test
+  void testCreateBadFormatCityHousingLocation() {
+    assertThrows(TransactionSystemException.class, () -> {
+      housingLocationServiceImpl.createHousingLocation(badFormatCityHousingLocation);
+    });
+  }
+
+  @Test
+  void testCreateBadFormatCityMaxSizeHousingLocation() {
+    assertThrows(TransactionSystemException.class, () -> {
+      housingLocationServiceImpl.createHousingLocation(badFormatCityMaxSizeHousingLocation);
+    });
+
+  }
+
+  @Test
+  void testCreateBadFormatStateHousingLocation() {
+    assertThrows(TransactionSystemException.class, () -> {
+      housingLocationServiceImpl.createHousingLocation(badFormatStateHousingLocation);
+    });
+  }
+
+  @Test
+  void testCreateBadFormatStateMaxSizeHousingLocation() {
+    assertThrows(TransactionSystemException.class, () -> {
+      housingLocationServiceImpl.createHousingLocation(badFormatStateMaxSizeHousingLocation);
+    });
+  }
+
+  @Test
+  void testCreateBadFormatZipcodeHousingLocation() {
+    assertThrows(TransactionSystemException.class, () -> {
+      housingLocationServiceImpl.createHousingLocation(badFormatZipcodeHousingLocation);
+    });
+  }
+
+  @Test
+  void testCreateBadFormatZipcodemaxSizeHousingLocation() {
+    assertThrows(TransactionSystemException.class, () -> {
+      housingLocationServiceImpl.createHousingLocation(badFormatZipcodeMaxSizeHousingLocation);
+    });
+  }
+
+  @Test
+  void testCreateBadFormatHousingLocationNameHousingLocation() {
+    assertThrows(TransactionSystemException.class, () -> {
+      housingLocationServiceImpl.createHousingLocation(badFormatHousingLocationNameHousingLocation);
+    });
+  }
+
+  @Test
+  void testCreateHousingLocationWithNullTrainingLocation() {
+    assertThrows(NullPointerException.class, () -> {
+      housingLocationServiceImpl.createHousingLocation(housingLocationWithNullTrainingLocation);
+    });
+  }
+
+  @Test
+  void testCreateHousingLocationWithEmptyTrainingLocation() {
+    assertThrows(NullPointerException.class, () -> {
+      housingLocationServiceImpl.createHousingLocation(housingLocationWithEmptyTrainingLocation);
+    });
+  }
 }
