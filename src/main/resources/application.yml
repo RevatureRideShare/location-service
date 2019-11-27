@@ -5,7 +5,8 @@ spring:
     name: location-service
   cloud:
     config:
-      uri: http://localhost:8888 
-
+      uri: http://localhost:8888
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
     
-
