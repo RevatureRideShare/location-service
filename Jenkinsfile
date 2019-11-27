@@ -20,7 +20,6 @@ pipeline {
                 
                 // Run in non-interactive (batch) mode
                 sh 'mvn -U -B -DskipTests clean package'
-            
             }
         }
 
