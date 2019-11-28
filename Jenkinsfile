@@ -13,11 +13,9 @@ pipeline {
 
     stages {
         stage ('Build') {
-            steps {
-                
+            steps {  
                 deleteDir()
                 checkout scm
-                
                 // Run in non-interactive (batch) mode
                 sh 'mvn -U -B -DskipTests clean package'
             }
