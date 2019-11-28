@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface HousingLocationRepo extends JpaRepository<HousingLocation, Integer> {
-  public List<HousingLocation> findByTrainingLocation_TrainingLocationID(int trainingLocationID);
+  public List<HousingLocation> findHousingLocationByTrainingLocationID(int trainingLocationID);
 }
