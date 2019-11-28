@@ -21,6 +21,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.TransactionSystemException;
 
 @SpringBootTest
@@ -67,8 +69,8 @@ class HousingLocationServiceImplIntegrationTest {
     nullHousingLocation = null;
     nullTrainingLocation = null;
     emptyTrainingLocation = new TrainingLocation(3, "");
-    existingTrainingLocation = new TrainingLocation(3, "Existing Location");
-    existingHousingLocation = new HousingLocation(5, "13452 BB Downs", "", "Tampa", "Florida",
+    existingTrainingLocation = new TrainingLocation(1, "Existing Location");
+    existingHousingLocation = new HousingLocation(1, "13452 BB Downs", "", "Tampa", "Florida",
         "34116", "The Standard", existingTrainingLocation);
     newHousingLocation = new HousingLocation(2, "65843 Magnolia Drive", "", "Tampa", "Florida",
         "34116", "Exceptional Apartments", existingTrainingLocation);
@@ -96,10 +98,10 @@ class HousingLocationServiceImplIntegrationTest {
         "Florida", "403392049450596655444", "Bonita Heights", existingTrainingLocation);
     badFormatHousingLocationNameHousingLocation = new HousingLocation(4, "13452 BB Downs", "",
         "Tampa", "Florida", "34116", "", existingTrainingLocation);
-    badFormatCityHousingLocation = new HousingLocation(4, "13452 BB Downs", "", "Tampa", "Florida",
-        "34116", "Bonita Heights", nullTrainingLocation);
-    badFormatCityHousingLocation = new HousingLocation(4, "13452 BB Downs", "", "Tampa", "Florida",
-        "34116", "Bonita Heights", emptyTrainingLocation);
+    housingLocationWithNullTrainingLocation = new HousingLocation(4, "13452 BB Downs", "", "Tampa",
+        "Florida", "34116", "Bonita Heights", nullTrainingLocation);
+    housingLocationWithEmptyTrainingLocation = new HousingLocation(4, "13452 BB Downs", "", "Tampa",
+        "Florida", "34116", "Bonita Heights", emptyTrainingLocation);
   }
 
   @AfterEach
@@ -115,6 +117,7 @@ class HousingLocationServiceImplIntegrationTest {
   }
 
   @Test
+  @Sql("housing-location-script.sql")
   void testGetExistingHousingLocationById() {
     assertEquals(
         housingLocationServiceImpl.getHousingLocation(existingHousingLocation.getLocationID()),
@@ -122,14 +125,17 @@ class HousingLocationServiceImplIntegrationTest {
   }
 
   @Test
+  @Sql("housing-location-script.sql")
   void testGetAllHousingLocation() {
     List<HousingLocation> existingHLocationList = new ArrayList<>();
     existingHLocationList.add(existingHousingLocation);
+    existingHLocationList.add(updatedHousingLocation);
     assertEquals(housingLocationServiceImpl.getAllHousingLocations(), existingHLocationList);
     System.out.println(housingLocationServiceImpl.getAllHousingLocations());
   }
 
   @Test
+  @Sql("housing-location-script.sql")
   void testCreateNewHousingLocation() {
     HousingLocation extraNewHousingLocation =
         housingLocationServiceImpl.createHousingLocation(newHousingLocation);
@@ -145,6 +151,7 @@ class HousingLocationServiceImplIntegrationTest {
   }
 
   @Test
+  @Sql("housing-location-script.sql")
   void testCreateExistingHousingLocation() {
     assertThrows(DuplicateKeyException.class, () -> {
       housingLocationServiceImpl.createHousingLocation(existingHousingLocation);
@@ -159,6 +166,7 @@ class HousingLocationServiceImplIntegrationTest {
   }
 
   @Test
+  @Sql("housing-location-script.sql")
   void testDeleteExistingHousingLocation() {
     housingLocationServiceImpl.deleteHousingLocation(existingHousingLocation);
     assertEquals(
@@ -167,6 +175,7 @@ class HousingLocationServiceImplIntegrationTest {
   }
 
   @Test
+  @Sql("housing-location-script.sql")
   void testUpdateExistingHousingLocation() {
     System.out.println("Current state of updatedHousingLocation"
         + housingLocationServiceImpl.getHousingLocation(updatedHousingLocation.getLocationID()));
@@ -242,14 +251,14 @@ class HousingLocationServiceImplIntegrationTest {
 
   @Test
   void testCreateHousingLocationWithNullTrainingLocation() {
-    assertThrows(NullPointerException.class, () -> {
+    assertThrows(TransactionSystemException.class, () -> {
       housingLocationServiceImpl.createHousingLocation(housingLocationWithNullTrainingLocation);
     });
   }
 
   @Test
   void testCreateHousingLocationWithEmptyTrainingLocation() {
-    assertThrows(NullPointerException.class, () -> {
+    assertThrows(JpaObjectRetrievalFailureException.class, () -> {
       housingLocationServiceImpl.createHousingLocation(housingLocationWithEmptyTrainingLocation);
     });
   }

@@ -12,23 +12,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.Rule;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.rules.ExpectedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.TransactionSystemException;
 
 @SpringBootTest
 class TrainingLocationServiceImplIntegrationTest {
-
-  @Rule
-  ExpectedException expectedEx = ExpectedException.none();
 
   private TrainingLocationServiceImpl trainingLocationServiceImpl;
   private TrainingLocation existingTrainingLocation;
@@ -57,11 +53,11 @@ class TrainingLocationServiceImplIntegrationTest {
   @BeforeEach
   void setUp() throws Exception {
     nullTrainingLocation = null;
-    existingTrainingLocation = new TrainingLocation(3, "Existing Location");
+    existingTrainingLocation = new TrainingLocation(1, "Existing Location");
     updatedTrainingLocation = new TrainingLocation(6, "Its Not Updated");
     nonExistingTrainingLocation = new TrainingLocation(999, "I Dont Exist");
     changedTrainingLocation = new TrainingLocation(6, "Its now updated!");
-    newTrainingLocation = new TrainingLocation(11, "New Training Location");
+    newTrainingLocation = new TrainingLocation(2, "New Training Location");
   }
 
   @AfterEach
@@ -70,6 +66,7 @@ class TrainingLocationServiceImplIntegrationTest {
   }
 
   @Test
+  @Sql("training-location-script.sql")
   void testGetExistingTrainingLocationById() {
     assertEquals(
         trainingLocationServiceImpl
@@ -78,9 +75,11 @@ class TrainingLocationServiceImplIntegrationTest {
   }
 
   @Test
+  @Sql("training-location-script.sql")
   void testGetAllTrainingLocation() {
     List<TrainingLocation> existingTLocationList = new ArrayList<>();
-    existingTLocationList.add(changedTrainingLocation);
+    existingTLocationList.add(existingTrainingLocation);
+    existingTLocationList.add(updatedTrainingLocation);
     assertEquals(trainingLocationServiceImpl.getAllTrainingLocations(), existingTLocationList);
 
     System.out.println(trainingLocationServiceImpl.getAllTrainingLocations());
@@ -96,6 +95,7 @@ class TrainingLocationServiceImplIntegrationTest {
   }
 
   @Test
+  @Sql("training-location-script.sql")
   void testCreateNewTrainingLocation() {
     TrainingLocation extraNewTraingingLocation =
         trainingLocationServiceImpl.createTrainingLocation(newTrainingLocation);
@@ -104,6 +104,7 @@ class TrainingLocationServiceImplIntegrationTest {
   }
 
   @Test
+  @Sql("training-location-script.sql")
   void testCreateExistingTrainingLocation() {
     assertThrows(DuplicateKeyException.class, () -> {
       trainingLocationServiceImpl.createTrainingLocation(existingTrainingLocation);
@@ -118,6 +119,7 @@ class TrainingLocationServiceImplIntegrationTest {
   }
 
   @Test
+  @Sql("training-location-script.sql")
   void testDeleteExistingTrainingLocation() {
     trainingLocationServiceImpl.deleteTrainingLocation(existingTrainingLocation);
     assertEquals(trainingLocationServiceImpl
@@ -133,6 +135,7 @@ class TrainingLocationServiceImplIntegrationTest {
   }
 
   @Test
+  @Sql("training-location-script.sql")
   void testUpdateExistingTrainingLocation() {
     System.out.println("Current state of updatedTrainingLocation" + trainingLocationServiceImpl
         .getTrainingLocation(updatedTrainingLocation.getTrainingLocationID()));
