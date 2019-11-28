@@ -108,14 +108,14 @@ class HousingLocationServiceImplIntegrationTest {
   void tearDown() throws Exception {
 
   }
-
+ 
   @Test
   void testCreatNullHousingLocation() {
     assertThrows(NullPointerException.class, () -> {
       housingLocationServiceImpl.createHousingLocation(nullHousingLocation);
     });
   }
-
+/*
   @Test
   @Sql("housing-location-script.sql")
   void testGetExistingHousingLocationById() {
@@ -261,5 +261,5 @@ class HousingLocationServiceImplIntegrationTest {
     assertThrows(JpaObjectRetrievalFailureException.class, () -> {
       housingLocationServiceImpl.createHousingLocation(housingLocationWithEmptyTrainingLocation);
     });
-  }
+  } */
 }
