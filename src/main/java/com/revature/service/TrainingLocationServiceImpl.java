@@ -13,6 +13,7 @@ import javax.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionSystemException;
 
 /**
  * This class contains all of the business logic for TrainingLocation, as well as calling the
@@ -36,18 +37,26 @@ public class TrainingLocationServiceImpl implements TrainingLocationService {
    * This method is used for creating a TrainingLocation by taking in a TrainingLocation object. If
    * the id/primary key already exists in the database, then this method throws a
    * DuplicateKeyException. If the TrainingLocation passed in is null, then the method should throw
-   * a NullPointerException because you cannot use getLocationID() on a null object. If any of the
-   * bean validation on the TrainingLocation passed in is violated, then the method should expect a
-   * ConstraintViolationException from TrainingLocationRepo.
+   * a NullPointerException because you cannot use getTrainingLocationID() on a null object. If any
+   * of the bean validation on the TrainingLocation passed in is violated, then the method should
+   * throw a ConstraintViolationException.
    */
   @Override
   public TrainingLocation createTrainingLocation(TrainingLocation trainingLocation)
-      throws NullPointerException, ConstraintViolationException {
-
+      throws NullPointerException {
     if (getTrainingLocation(trainingLocation.getTrainingLocationID()).isPresent()) {
       throw new DuplicateKeyException("Object already exists in database");
     } else {
-      return trainingLocationRepo.save(trainingLocation);
+      try {
+        return trainingLocationRepo.save(trainingLocation);
+      } catch (TransactionSystemException t) {
+        Throwable myT = t.getCause().getCause();
+
+        if (myT instanceof ConstraintViolationException) {
+          throw ((ConstraintViolationException) myT);
+        }
+        throw t;
+      }
     }
   }
 
@@ -55,8 +64,8 @@ public class TrainingLocationServiceImpl implements TrainingLocationService {
    * This method is used for deleting a TrainingLocation by taking in a TrainingLocation object. If
    * a TrainingLocation with the id/primary key does not exist in the database, then this method
    * throws a custom DeleteNonExistentException. If the TrainingLocation passed in is null, then the
-   * method should throw a NullPointerException because you cannot use getLocationID() on a null
-   * object.
+   * method should throw a NullPointerException because you cannot use getTrainingLocationID() on a
+   * null object.
    */
   @Override
   public void deleteTrainingLocation(TrainingLocation trainingLocation)
@@ -83,18 +92,27 @@ public class TrainingLocationServiceImpl implements TrainingLocationService {
    * This method is used for updating a TrainingLocation by taking in a TrainingLocation object. If
    * the id/primary key does not exist in the database, then this method throws a custom
    * UpdateNonexistentException. If the TrainingLocation passed in is null, then the method should
-   * throw a NullPointerException because you cannot use getLocationID() on a null object. If any of
-   * the bean validation on the TrainingLocation passed in is violated, then the method should
-   * expect a ConstraintViolationException from TrainingLocationRepo.
+   * throw a NullPointerException because you cannot use getTrainingLocationID() on a null object.
+   * If any of the bean validation on the TrainingLocation passed in is violated, then the method
+   * should expect a ConstraintViolationException from TrainingLocationRepo.
    */
   @Override
   public TrainingLocation updateTrainingLocation(TrainingLocation trainingLocation)
-      throws NullPointerException, ConstraintViolationException {
+      throws NullPointerException {
     if (!getTrainingLocation(trainingLocation.getTrainingLocationID()).isPresent()) {
       throw new UpdateNonexistentException(
           trainingLocation + " does not exist and cannot be updated");
     } else {
-      return trainingLocationRepo.save(trainingLocation);
+      try {
+        return trainingLocationRepo.save(trainingLocation);
+      } catch (TransactionSystemException t) {
+        Throwable myT = t.getCause().getCause();
+
+        if (myT instanceof ConstraintViolationException) {
+          throw ((ConstraintViolationException) myT);
+        }
+        throw t;
+      }
     }
   }
 

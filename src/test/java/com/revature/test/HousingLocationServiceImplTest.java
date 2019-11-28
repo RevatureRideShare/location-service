@@ -147,6 +147,16 @@ class HousingLocationServiceImplTest {
   }
 
   @Test
+  void testGetHousingLocationsByTrainingLocation() {
+    List<HousingLocation> existingList = new LinkedList<>();
+    existingList.add(existingHousingLocation);
+    when(housingLocationRepo.findByTrainingLocation_TrainingLocationID(
+        existingTrainingLocation.getTrainingLocationID())).thenReturn(existingList);
+    assertEquals(existingList, housingLocationServiceImpl
+        .getHousingLocationsByTrainingLocation(existingTrainingLocation.getTrainingLocationID()));
+  }
+
+  @Test
   void testGetAllHousingLocations() {
     List<HousingLocation> existingList = new LinkedList<>();
     existingList.add(existingHousingLocation);

@@ -5,22 +5,19 @@ import com.revature.bean.HousingLocation;
 import java.util.List;
 import java.util.Optional;
 
-import javax.validation.ConstraintViolationException;
-
-
-
 public interface HousingLocationService {
 
   public HousingLocation createHousingLocation(HousingLocation housingLocation)
-      throws IllegalArgumentException, ConstraintViolationException;
+      throws NullPointerException;
 
-  public void deleteHousingLocation(HousingLocation housingLocation)
-      throws IllegalArgumentException;
+  public void deleteHousingLocation(HousingLocation housingLocation) throws NullPointerException;
 
   public Optional<HousingLocation> getHousingLocation(int locationID);
 
   public HousingLocation updateHousingLocation(HousingLocation housingLocation)
-      throws IllegalArgumentException, ConstraintViolationException;
+      throws NullPointerException;
+
+  public List<HousingLocation> getHousingLocationsByTrainingLocation(int trainingLocationID);
 
   public List<HousingLocation> getAllHousingLocations();
 }

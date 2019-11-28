@@ -13,6 +13,7 @@ import javax.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionSystemException;
 
 /**
  * This class contains all of the business logic for HousingLocation, as well as calling the
@@ -42,11 +43,20 @@ public class HousingLocationServiceImpl implements HousingLocationService {
    */
   @Override
   public HousingLocation createHousingLocation(HousingLocation housingLocation)
-      throws NullPointerException, ConstraintViolationException {
+      throws NullPointerException {
     if (getHousingLocation(housingLocation.getLocationID()).isPresent()) {
       throw new DuplicateKeyException("Object already exists in database");
     } else {
-      return housingLocationRepo.save(housingLocation);
+      try {
+        return housingLocationRepo.save(housingLocation);
+      } catch (TransactionSystemException t) {
+        Throwable myT = t.getCause().getCause();
+
+        if (myT instanceof ConstraintViolationException) {
+          throw ((ConstraintViolationException) myT);
+        }
+        throw t;
+      }
     }
   }
 
@@ -86,12 +96,31 @@ public class HousingLocationServiceImpl implements HousingLocationService {
    */
   @Override
   public HousingLocation updateHousingLocation(HousingLocation housingLocation)
-      throws NullPointerException, ConstraintViolationException {
+      throws NullPointerException {
     if (!getHousingLocation(housingLocation.getLocationID()).isPresent()) {
-      throw new UpdateNonexistentException(housingLocation + " does not exist");
+      throw new UpdateNonexistentException(
+          housingLocation + " does not exist and cannot be updated");
     } else {
-      return housingLocationRepo.save(housingLocation);
+      try {
+        return housingLocationRepo.save(housingLocation);
+      } catch (TransactionSystemException t) {
+        Throwable myT = t.getCause().getCause();
+
+        if (myT instanceof ConstraintViolationException) {
+          throw ((ConstraintViolationException) myT);
+        }
+        throw t;
+      }
     }
+  }
+
+  /**
+   * This method is used for retrieving all HousingLocations associated with the given
+   * TrainingLocation in the database.
+   */
+  @Override
+  public List<HousingLocation> getHousingLocationsByTrainingLocation(int trainingLocationID) {
+    return housingLocationRepo.findByTrainingLocation_TrainingLocationID(trainingLocationID);
   }
 
   /**
@@ -101,5 +130,4 @@ public class HousingLocationServiceImpl implements HousingLocationService {
   public List<HousingLocation> getAllHousingLocations() {
     return housingLocationRepo.findAll();
   }
-
 }
