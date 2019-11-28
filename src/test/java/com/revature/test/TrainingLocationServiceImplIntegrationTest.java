@@ -117,6 +117,7 @@ class TrainingLocationServiceImplIntegrationTest {
       trainingLocationServiceImpl.createTrainingLocation(nullTrainingLocation);
     });
   }
+  
 
   @Test
   @Sql("training-location-script.sql")
