@@ -17,7 +17,7 @@ public interface HousingLocationService {
   public HousingLocation updateHousingLocation(HousingLocation housingLocation)
       throws NullPointerException;
 
-  public List<HousingLocation> getHousingLocationsByTrainingLocation(int trainingLocationID);
+  public List<HousingLocation> getHousingLocation_TrainingLocation(int trainingLocationID);
 
   public List<HousingLocation> getAllHousingLocations();
 }

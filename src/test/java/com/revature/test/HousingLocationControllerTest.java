@@ -148,7 +148,7 @@ class HousingLocationControllerTest {
     existingList.add(existingHousingLocation);
 
     when(housingLocationService
-        .getHousingLocationsByTrainingLocation(existingTrainingLocation.getTrainingLocationID()))
+        .getHousingLocation_TrainingLocation(existingTrainingLocation.getTrainingLocationID()))
             .thenReturn(existingList);
     mvc.perform(
         MockMvcRequestBuilders.get("/training-location/{trainingLocationID}/housing-location",

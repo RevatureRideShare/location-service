@@ -262,4 +262,15 @@ class HousingLocationServiceImplIntegrationTest {
       housingLocationServiceImpl.createHousingLocation(housingLocationWithEmptyTrainingLocation);
     });
   }
+
+  @Test
+  @Sql("housing-location-script.sql")
+  void testGetAllHousingLocationsByTrainingLocationId() {
+    List<HousingLocation> existingHLocationList = new ArrayList<>();
+    existingHLocationList.add(existingHousingLocation);
+    existingHLocationList.add(updatedHousingLocation);
+    assertEquals(housingLocationServiceImpl.getHousingLocation_TrainingLocation(
+        existingTrainingLocation.getTrainingLocationID()), existingHLocationList);
+
+  }
 }
