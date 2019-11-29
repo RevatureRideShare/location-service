@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.validation.ConstraintViolationException;
 
@@ -158,6 +159,25 @@ class HousingLocationControllerTest {
             existingTrainingLocation.getTrainingLocationID()))
         .andExpect(status().isOk())
         .andExpect(content().json(new ObjectMapper().writeValueAsString(existingList)));
+  }
+
+  @Test
+  void testGetNewHousingLocation() throws Exception {
+    when(housingLocationService.getHousingLocation(newHousingLocation.getLocationID()))
+        .thenReturn(Optional.empty());
+
+    mvc.perform(MockMvcRequestBuilders.get("/housing-location/{housingLocationID}",
+        newHousingLocation.getLocationID())).andExpect(status().isNoContent());
+  }
+
+  @Test
+  void testGetExistingHousingLocation() throws Exception {
+    when(housingLocationService.getHousingLocation(existingHousingLocation.getLocationID()))
+        .thenReturn(Optional.of(existingHousingLocation));
+
+    mvc.perform(MockMvcRequestBuilders.get("/housing-location/{housingLocationID}",
+        existingHousingLocation.getLocationID())).andExpect(status().isOk())
+        .andExpect(content().json(new ObjectMapper().writeValueAsString(existingHousingLocation)));
   }
 
   @Test

@@ -6,6 +6,7 @@ import com.revature.service.HousingLocationService;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.validation.ConstraintViolationException;
 
@@ -66,6 +67,28 @@ public class HousingLocationController {
     } catch (NullPointerException n) {
       error.put("message", "Cannot pass in a null HousingLocation object");
       return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  /**
+   * This method is a RESTful endpoint that finds the housing location in the database associated
+   * with the given housingID. It returns the ResponseEntity with the HousingLocation passed in and
+   * HttpStatus.OK. If there is no such housing location, then it should return just an
+   * HttpStatus.NO_CONTENT.
+   * 
+   * @param housingID The id of the housing location being looked for
+   * @return The ResponseEntity object with the housing location and HTTP status code
+   */
+  @GetMapping("/housing-location/{housingID}")
+  public ResponseEntity<HousingLocation> getHousingLocation(
+      @PathVariable("housingID") int housingID) {
+    Optional<HousingLocation> optHousingLocation =
+        housingLocationService.getHousingLocation(housingID);
+
+    if (optHousingLocation.isPresent()) {
+      return new ResponseEntity<>(optHousingLocation.get(), HttpStatus.OK);
+    } else {
+      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
   }
 
