@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.ConstraintViolationException;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -23,7 +25,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.transaction.TransactionSystemException;
 
 @SpringBootTest
 class HousingLocationServiceImplIntegrationTest {
@@ -194,21 +195,21 @@ class HousingLocationServiceImplIntegrationTest {
 
   @Test
   void testCreateBadFormatAddress1HousingLocation() {
-    assertThrows(TransactionSystemException.class, () -> {
+    assertThrows(ConstraintViolationException.class, () -> {
       housingLocationServiceImpl.createHousingLocation(badFormatAddress1HousingLocation);
     });
   }
 
   @Test
   void testCreateBadFormatCityHousingLocation() {
-    assertThrows(TransactionSystemException.class, () -> {
+    assertThrows(ConstraintViolationException.class, () -> {
       housingLocationServiceImpl.createHousingLocation(badFormatCityHousingLocation);
     });
   }
 
   @Test
   void testCreateBadFormatCityMaxSizeHousingLocation() {
-    assertThrows(TransactionSystemException.class, () -> {
+    assertThrows(ConstraintViolationException.class, () -> {
       housingLocationServiceImpl.createHousingLocation(badFormatCityMaxSizeHousingLocation);
     });
 
@@ -216,42 +217,42 @@ class HousingLocationServiceImplIntegrationTest {
 
   @Test
   void testCreateBadFormatStateHousingLocation() {
-    assertThrows(TransactionSystemException.class, () -> {
+    assertThrows(ConstraintViolationException.class, () -> {
       housingLocationServiceImpl.createHousingLocation(badFormatStateHousingLocation);
     });
   }
 
   @Test
   void testCreateBadFormatStateMaxSizeHousingLocation() {
-    assertThrows(TransactionSystemException.class, () -> {
+    assertThrows(ConstraintViolationException.class, () -> {
       housingLocationServiceImpl.createHousingLocation(badFormatStateMaxSizeHousingLocation);
     });
   }
 
   @Test
   void testCreateBadFormatZipcodeHousingLocation() {
-    assertThrows(TransactionSystemException.class, () -> {
+    assertThrows(ConstraintViolationException.class, () -> {
       housingLocationServiceImpl.createHousingLocation(badFormatZipcodeHousingLocation);
     });
   }
 
   @Test
   void testCreateBadFormatZipcodemaxSizeHousingLocation() {
-    assertThrows(TransactionSystemException.class, () -> {
+    assertThrows(ConstraintViolationException.class, () -> {
       housingLocationServiceImpl.createHousingLocation(badFormatZipcodeMaxSizeHousingLocation);
     });
   }
 
   @Test
   void testCreateBadFormatHousingLocationNameHousingLocation() {
-    assertThrows(TransactionSystemException.class, () -> {
+    assertThrows(ConstraintViolationException.class, () -> {
       housingLocationServiceImpl.createHousingLocation(badFormatHousingLocationNameHousingLocation);
     });
   }
 
   @Test
   void testCreateHousingLocationWithNullTrainingLocation() {
-    assertThrows(TransactionSystemException.class, () -> {
+    assertThrows(ConstraintViolationException.class, () -> {
       housingLocationServiceImpl.createHousingLocation(housingLocationWithNullTrainingLocation);
     });
   }
@@ -271,6 +272,8 @@ class HousingLocationServiceImplIntegrationTest {
     existingHLocationList.add(updatedHousingLocation);
     assertEquals(housingLocationServiceImpl.getHousingLocation_TrainingLocation(
         existingTrainingLocation.getTrainingLocationID()), existingHLocationList);
+    System.out.println(housingLocationServiceImpl
+        .getHousingLocation_TrainingLocation(existingTrainingLocation.getTrainingLocationID()));
 
   }
 }
