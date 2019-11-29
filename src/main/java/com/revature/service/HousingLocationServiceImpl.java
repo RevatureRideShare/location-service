@@ -120,7 +120,7 @@ public class HousingLocationServiceImpl implements HousingLocationService {
    */
   @Override
   public List<HousingLocation> getHousingLocationsByTrainingLocation(int trainingLocationID) {
-    return housingLocationRepo.findHousingLocationByTrainingLocationID(trainingLocationID);
+    return housingLocationRepo.findByTrainingLocation_TrainingLocationID(trainingLocationID);
   }
 
   /**
