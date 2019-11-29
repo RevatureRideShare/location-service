@@ -26,12 +26,15 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+
+@SpringBootTest
 class HousingLocationControllerTest {
   @Mock
   HousingLocationService housingLocationService;
@@ -148,7 +151,7 @@ class HousingLocationControllerTest {
     existingList.add(existingHousingLocation);
 
     when(housingLocationService
-        .getHousingLocation_TrainingLocation(existingTrainingLocation.getTrainingLocationID()))
+        .getHousingLocationByTrainingLocation(existingTrainingLocation.getTrainingLocationID()))
             .thenReturn(existingList);
     mvc.perform(
         MockMvcRequestBuilders.get("/training-location/{trainingLocationID}/housing-location",

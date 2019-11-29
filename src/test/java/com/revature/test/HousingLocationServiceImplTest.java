@@ -153,7 +153,7 @@ class HousingLocationServiceImplTest {
     when(housingLocationRepo.findByTrainingLocation_TrainingLocationID(
         existingTrainingLocation.getTrainingLocationID())).thenReturn(existingList);
     assertEquals(existingList, housingLocationServiceImpl
-        .getHousingLocation_TrainingLocation(existingTrainingLocation.getTrainingLocationID()));
+        .getHousingLocationByTrainingLocation(existingTrainingLocation.getTrainingLocationID()));
   }
 
   @Test

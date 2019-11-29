@@ -119,7 +119,7 @@ public class HousingLocationServiceImpl implements HousingLocationService {
    * TrainingLocation in the database.
    */
   @Override
-  public List<HousingLocation> getHousingLocation_TrainingLocation(int trainingLocationID) {
+  public List<HousingLocation> getHousingLocationByTrainingLocation(int trainingLocationID) {
     return housingLocationRepo.findByTrainingLocation_TrainingLocationID(trainingLocationID);
   }
 

@@ -94,7 +94,7 @@ public class HousingLocationController {
   public ResponseEntity<List<HousingLocation>> getHousingLocationsByTrainingLocation(
       @PathVariable("trainingLocationID") int trainingLocationID) {
     List<HousingLocation> housingLocations =
-        housingLocationService.getHousingLocation_TrainingLocation(trainingLocationID);
+        housingLocationService.getHousingLocationByTrainingLocation(trainingLocationID);
 
     return new ResponseEntity<>(housingLocations, HttpStatus.OK);
   }

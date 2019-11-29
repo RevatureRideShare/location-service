@@ -270,10 +270,10 @@ class HousingLocationServiceImplIntegrationTest {
     List<HousingLocation> existingHLocationList = new ArrayList<>();
     existingHLocationList.add(existingHousingLocation);
     existingHLocationList.add(updatedHousingLocation);
-    assertEquals(housingLocationServiceImpl.getHousingLocation_TrainingLocation(
+    assertEquals(housingLocationServiceImpl.getHousingLocationByTrainingLocation(
         existingTrainingLocation.getTrainingLocationID()), existingHLocationList);
     System.out.println(housingLocationServiceImpl
-        .getHousingLocation_TrainingLocation(existingTrainingLocation.getTrainingLocationID()));
+        .getHousingLocationByTrainingLocation(existingTrainingLocation.getTrainingLocationID()));
 
   }
 }
