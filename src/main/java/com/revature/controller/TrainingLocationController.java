@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
  * appropriate TrainingLocationService methods.
  * 
  * @author Jane Shin
- * @author Erik Haklar
  * @author Roberto Rodriguez
  */
 @RestController

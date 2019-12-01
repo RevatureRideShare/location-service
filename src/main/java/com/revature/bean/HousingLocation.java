@@ -23,7 +23,6 @@ import javax.validation.constraints.Size;
  * that consists of the training location name and its respective training location id.
  * 
  * @author Roberto Rodriguez
- * @author Erik Haklar
  * @author Jane Shin
  */
 @Entity

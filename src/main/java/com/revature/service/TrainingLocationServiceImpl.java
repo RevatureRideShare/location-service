@@ -20,7 +20,6 @@ import org.springframework.transaction.TransactionSystemException;
  * appropriate TrainingLocationRepo methods. It implements the TrainingLocationService interface.
  * 
  * @author Jane Shin
- * @author Erik Haklar
  * @author Roberto Rodriguez
  */
 @Service

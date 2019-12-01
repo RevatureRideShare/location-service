@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
  * appropriate HousingLocationService methods.
  * 
  * @author Jane Shin
- * @author Erik Haklar
  * @author Roberto Rodriguez
  */
 @RestController

@@ -20,7 +20,6 @@ import org.springframework.transaction.TransactionSystemException;
  * appropriate HousingLocationRepo methods. It implements the HousingLocationService interface.
  * 
  * @author Jane Shin
- * @author Erik Haklar
  * @author Roberto Rodriguez
  */
 @Service
