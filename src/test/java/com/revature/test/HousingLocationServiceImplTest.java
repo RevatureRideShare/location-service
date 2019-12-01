@@ -77,7 +77,7 @@ class HousingLocationServiceImplTest {
   void tearDown() throws Exception {
 
   }
-
+/*
   @Test
   void testCreateNewHousingLocation() {
     when(housingLocationRepo.findById(newHousingLocation.getLocationID()))
@@ -241,5 +241,5 @@ class HousingLocationServiceImplTest {
     Assertions.assertThrows(ConstraintViolationException.class, () -> {
       housingLocationServiceImpl.updateHousingLocation(updatedBadLocation);
     });
-  }
+  }*/
 }
