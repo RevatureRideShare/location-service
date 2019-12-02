@@ -82,8 +82,6 @@ class TrainingLocationServiceImplIntegrationTest {
     existingTLocationList.add(existingTrainingLocation);
     existingTLocationList.add(updatedTrainingLocation);
     assertEquals(trainingLocationServiceImpl.getAllTrainingLocations(), existingTLocationList);
-
-    System.out.println(trainingLocationServiceImpl.getAllTrainingLocations());
   }
 
   @Test
@@ -138,8 +136,6 @@ class TrainingLocationServiceImplIntegrationTest {
   @Test
   @Sql("training-location-script.sql")
   void testUpdateExistingTrainingLocation() {
-    System.out.println("Current state of updatedTrainingLocation" + trainingLocationServiceImpl
-        .getTrainingLocation(updatedTrainingLocation.getTrainingLocationID()));
     trainingLocationServiceImpl.updateTrainingLocation(changedTrainingLocation);
     assertEquals(trainingLocationServiceImpl.getTrainingLocation(
         changedTrainingLocation.getTrainingLocationID()), Optional.of(changedTrainingLocation));

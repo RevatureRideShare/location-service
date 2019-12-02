@@ -132,7 +132,6 @@ class HousingLocationServiceImplIntegrationTest {
     existingHLocationList.add(existingHousingLocation);
     existingHLocationList.add(updatedHousingLocation);
     assertEquals(housingLocationServiceImpl.getAllHousingLocations(), existingHLocationList);
-    System.out.println(housingLocationServiceImpl.getAllHousingLocations());
   }
 
   @Test
@@ -178,8 +177,6 @@ class HousingLocationServiceImplIntegrationTest {
   @Test
   @Sql("housing-location-script.sql")
   void testUpdateExistingHousingLocation() {
-    System.out.println("Current state of updatedHousingLocation"
-        + housingLocationServiceImpl.getHousingLocation(updatedHousingLocation.getLocationID()));
     housingLocationServiceImpl.updateHousingLocation(changedHousingLocation);
     assertEquals(
         housingLocationServiceImpl.getHousingLocation(changedHousingLocation.getLocationID()),
@@ -272,8 +269,5 @@ class HousingLocationServiceImplIntegrationTest {
     existingHLocationList.add(updatedHousingLocation);
     assertEquals(housingLocationServiceImpl.getHousingLocationByTrainingLocation(
         existingTrainingLocation.getTrainingLocationID()), existingHLocationList);
-    System.out.println(housingLocationServiceImpl
-        .getHousingLocationByTrainingLocation(existingTrainingLocation.getTrainingLocationID()));
-
   }
 }

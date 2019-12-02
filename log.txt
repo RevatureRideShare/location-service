@@ -1,4 +1,0 @@
-2019-12-01 20:35:10 TRACE root:29 - Inside getAllTrainingLocation Service method.
-2019-12-01 20:35:10 TRACE root:29 - Returning a list of TrainingLocations
-2019-12-01 20:35:10 TRACE root:29 - Inside getAllTrainingLocation Service method.
-2019-12-01 20:35:10 TRACE root:29 - Returning a list of TrainingLocations
