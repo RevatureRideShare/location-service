@@ -1,7 +1,6 @@
 package com.revature.test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.util.LinkedList;
@@ -240,8 +239,8 @@ class HousingLocationServiceImplTest {
     });
   }
 
-  @Test
-  void dummy() {
-    assertTrue(false);
-  }
+  // @Test
+  // void dummy() {
+  // assertTrue(false);
+  // }
 }
