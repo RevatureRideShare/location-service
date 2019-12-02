@@ -42,6 +42,12 @@ pipeline {
             }
         }
 
+        stage('Test'){
+            steps{
+                sh 'mvn surefire:test'
+            }
+        }
+
         stage('Checkstyle') { // Code smells
             steps {
                 sh 'mvn verify checkstyle:checkstyle'
