@@ -3,20 +3,10 @@ package com.revature.test;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import com.revature.bean.HousingLocation;
-import com.revature.bean.TrainingLocation;
-import com.revature.exception.DeleteNonexistentException;
-import com.revature.exception.UpdateNonexistentException;
-import com.revature.repo.HousingLocationRepo;
-import com.revature.service.HousingLocationServiceImpl;
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-
 import javax.validation.ConstraintViolationException;
-
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -27,6 +17,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DuplicateKeyException;
+import com.revature.bean.HousingLocation;
+import com.revature.bean.TrainingLocation;
+import com.revature.exception.DeleteNonexistentException;
+import com.revature.exception.UpdateNonexistentException;
+import com.revature.repo.HousingLocationRepo;
+import com.revature.service.HousingLocationServiceImpl;
 
 @SpringBootTest
 class HousingLocationServiceImplTest {
@@ -77,7 +73,7 @@ class HousingLocationServiceImplTest {
   void tearDown() throws Exception {
 
   }
-/*
+
   @Test
   void testCreateNewHousingLocation() {
     when(housingLocationRepo.findById(newHousingLocation.getLocationID()))
@@ -241,5 +237,10 @@ class HousingLocationServiceImplTest {
     Assertions.assertThrows(ConstraintViolationException.class, () -> {
       housingLocationServiceImpl.updateHousingLocation(updatedBadLocation);
     });
-  }*/
+  }
+
+  // @Test
+  // void dummy() {
+  // assertTrue(false);
+  // }
 }

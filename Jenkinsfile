@@ -42,15 +42,33 @@ pipeline {
             }
         }
 
+        // stage('Test'){ //ran out of time before figureing out how to format the report file
+        //     steps{
+        //         script{
+        //             try{
+        //                 sh 'mvn surefire:test'
+        //                 echo "first ls"
+		// 				sh 'ls target/surefire-reports'
+        //                 }catch(err){
+        //                     echo "Caught: ${err}"
+        //                     //currentBuild.result = 'UNSTABLE'
+        //                 }
+        //         }            
+        //     }
+        // }
+
         stage('Checkstyle') { // Code smells
             steps {
-                script{
+                   script{
                     try{
                         sh 'mvn verify checkstyle:checkstyle'
-                    } catch(err){
-
-                    }
-                }
+                       // echo "second ls"
+						//sh 'ls target/surefire-reports'
+                        }catch(err){
+                            echo "Caught: ${err}"
+                            //currentBuild.result = 'UNSTABLE'
+                        }
+                }                        
             }
         }
 
