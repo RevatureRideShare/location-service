@@ -47,7 +47,8 @@ pipeline {
                 script{
                     try{
                         sh 'mvn surefire:test'
-
+                        echo "first ls"
+						sh 'ls target'
                         }catch(err){
                             echo "Caught: ${err}"
                             //currentBuild.result = 'UNSTABLE'
@@ -61,7 +62,8 @@ pipeline {
                    script{
                     try{
                         sh 'mvn verify checkstyle:checkstyle'
-
+                        echo "second ls"
+						sh 'ls target'
                         }catch(err){
                             echo "Caught: ${err}"
                             //currentBuild.result = 'UNSTABLE'
