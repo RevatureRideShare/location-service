@@ -1,5 +1,8 @@
 package com.revature.controller;
 
+import static com.revature.util.LoggerUtil.error;
+import static com.revature.util.LoggerUtil.trace;
+
 import com.revature.bean.HousingLocation;
 import com.revature.service.HousingLocationService;
 
@@ -51,20 +54,30 @@ public class HousingLocationController {
   @PostMapping("/housing-location")
   public ResponseEntity<?> createHousingLocation(
       @RequestBody(required = false) HousingLocation housingLocation) {
+    trace("Inside of createHousingLocation Service method.");
+
     HousingLocation newHousingLocation;
     Map<String, Object> error = new HashMap<>();
 
     try {
+      trace("Trying to create a Housing Location.");
       newHousingLocation = housingLocationService.createHousingLocation(housingLocation);
+      trace("Returning a created response.");
       return new ResponseEntity<>(newHousingLocation, HttpStatus.CREATED);
     } catch (ConstraintViolationException c) {
+      error("ConstraintViolationException has been caught.");
       error.put("message", c.getMessage());
+      trace("Returning a bad request.");
       return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     } catch (DuplicateKeyException d) {
+      error("DuplicateKeyException has been caught.");
       error.put("message", d.getMessage());
+      trace("Returning a bad request.");
       return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     } catch (NullPointerException n) {
+      error("NullPointerException has been caught.");
       error.put("message", "Cannot pass in a null HousingLocation object");
+      trace("Returning a bad request.");
       return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
   }
@@ -81,12 +94,16 @@ public class HousingLocationController {
   @GetMapping("/housing-location/{housingID}")
   public ResponseEntity<HousingLocation> getHousingLocation(
       @PathVariable("housingID") int housingID) {
+    trace("Inside getHousingLocation Controller method.");
     Optional<HousingLocation> optHousingLocation =
         housingLocationService.getHousingLocation(housingID);
 
     if (optHousingLocation.isPresent()) {
+      trace("Housing Location is present.");
+      trace("Retuning an OK response.");
       return new ResponseEntity<>(optHousingLocation.get(), HttpStatus.OK);
     } else {
+      trace("Returning a No Content response.");
       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
   }
@@ -99,8 +116,9 @@ public class HousingLocationController {
    */
   @GetMapping("/housing-location")
   public ResponseEntity<List<HousingLocation>> getAllHousingLocations() {
+    trace("Inside getAllHousingLocations Controller method.");
     List<HousingLocation> allHousingLocations = housingLocationService.getAllHousingLocations();
-
+    trace("Returning an OK response.");
     return new ResponseEntity<>(allHousingLocations, HttpStatus.OK);
   }
 
@@ -115,9 +133,10 @@ public class HousingLocationController {
   @GetMapping("/training-location/{trainingLocationID}/housing-location")
   public ResponseEntity<List<HousingLocation>> getHousingLocationsByTrainingLocation(
       @PathVariable("trainingLocationID") int trainingLocationID) {
+    trace("Inside the getHosuingLocationsByTrainingLocation Controller method.");
     List<HousingLocation> housingLocations =
         housingLocationService.getHousingLocationByTrainingLocation(trainingLocationID);
-
+    trace("Returning an OK response.");
     return new ResponseEntity<>(housingLocations, HttpStatus.OK);
   }
 }

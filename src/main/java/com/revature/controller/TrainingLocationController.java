@@ -1,5 +1,8 @@
 package com.revature.controller;
 
+import static com.revature.util.LoggerUtil.error;
+import static com.revature.util.LoggerUtil.trace;
+
 import com.revature.bean.TrainingLocation;
 import com.revature.service.TrainingLocationService;
 
@@ -49,20 +52,29 @@ public class TrainingLocationController {
   @PostMapping("/training-location")
   public ResponseEntity<?> createTrainingLocation(
       @RequestBody(required = false) TrainingLocation trainingLocation) {
+    trace("Inside the createTrainingLocation Controller method.");
     TrainingLocation newTrainingLocation;
     Map<String, Object> error = new HashMap<>();
 
     try {
+      trace("Trying to create a new Training Location.");
       newTrainingLocation = trainingLocationService.createTrainingLocation(trainingLocation);
+      trace("Returning a created response.");
       return new ResponseEntity<>(newTrainingLocation, HttpStatus.CREATED);
     } catch (ConstraintViolationException c) {
+      error("ConstraintViolationException has been caught.");
       error.put("message", c.getMessage());
+      trace("Returning a bad request.");
       return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     } catch (DuplicateKeyException d) {
+      error("DuplicateKeyEception has been caught.");
       error.put("message", d.getMessage());
+      trace("Returning a bad request.");
       return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     } catch (NullPointerException n) {
+      error("NullPointerException has been caught.");
       error.put("message", "Cannot pass in a null TrainingLocation object");
+      trace("Returning a bad request.");
       return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
   }
@@ -75,8 +87,9 @@ public class TrainingLocationController {
    */
   @GetMapping("/training-location")
   public ResponseEntity<List<TrainingLocation>> getAllTrainingLocations() {
+    trace("Inside of getAllTrainingLocations Controller method.");
     List<TrainingLocation> allTrainingLocations = trainingLocationService.getAllTrainingLocations();
-
+    trace("Returning a OK response.");
     return new ResponseEntity<>(allTrainingLocations, HttpStatus.OK);
   }
 }

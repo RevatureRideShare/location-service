@@ -1,5 +1,8 @@
 package com.revature.service;
 
+import static com.revature.util.LoggerUtil.error;
+import static com.revature.util.LoggerUtil.trace;
+
 import com.revature.bean.HousingLocation;
 import com.revature.exception.DeleteNonexistentException;
 import com.revature.exception.UpdateNonexistentException;
@@ -43,15 +46,20 @@ public class HousingLocationServiceImpl implements HousingLocationService {
   @Override
   public HousingLocation createHousingLocation(HousingLocation housingLocation)
       throws NullPointerException {
+    trace("Inside of the createHousingLocation Service method.");
     if (getHousingLocation(housingLocation.getLocationID()).isPresent()) {
       throw new DuplicateKeyException("Object already exists in database");
     } else {
       try {
+        trace("Housing Location has been created.");
         return housingLocationRepo.save(housingLocation);
+
       } catch (TransactionSystemException t) {
+        error("A TransactionSystemException has been caught.");
         Throwable myT = t.getCause().getCause();
 
         if (myT instanceof ConstraintViolationException) {
+          error("A ConstraintViolationException has been found.");
           throw ((ConstraintViolationException) myT);
         }
         throw t;
@@ -67,11 +75,14 @@ public class HousingLocationServiceImpl implements HousingLocationService {
    */
   @Override
   public void deleteHousingLocation(HousingLocation housingLocation) throws NullPointerException {
+    trace("Inside of deleteHousingLocation Service method.");
     if (!getHousingLocation(housingLocation.getLocationID()).isPresent()) {
+      error("DeleteNonexistentException has been thrown.");
       throw new DeleteNonexistentException(
           housingLocation + " does not exist and cannot be deleted");
     } else {
       housingLocationRepo.delete(housingLocation);
+      trace("Housing Location has been deleted.");
     }
   }
 
@@ -82,6 +93,8 @@ public class HousingLocationServiceImpl implements HousingLocationService {
    */
   @Override
   public Optional<HousingLocation> getHousingLocation(int locationID) {
+    trace("Inside getHousingLocation Service method.");
+    trace("Returning a Housing Location by the Id");
     return housingLocationRepo.findById(locationID);
   }
 
@@ -96,16 +109,21 @@ public class HousingLocationServiceImpl implements HousingLocationService {
   @Override
   public HousingLocation updateHousingLocation(HousingLocation housingLocation)
       throws NullPointerException {
+    trace("Inside of updateHousingLocation Service method.");
     if (!getHousingLocation(housingLocation.getLocationID()).isPresent()) {
+      error("DeleteNonexistentException has been thrown.");
       throw new UpdateNonexistentException(
           housingLocation + " does not exist and cannot be updated");
     } else {
       try {
+        trace("Housing Location is being updated.");
         return housingLocationRepo.save(housingLocation);
       } catch (TransactionSystemException t) {
+        error("A TransactionSystemException has been caught.");
         Throwable myT = t.getCause().getCause();
 
         if (myT instanceof ConstraintViolationException) {
+          error("A ConstraintViolationException has been found.");
           throw ((ConstraintViolationException) myT);
         }
         throw t;
@@ -119,6 +137,8 @@ public class HousingLocationServiceImpl implements HousingLocationService {
    */
   @Override
   public List<HousingLocation> getHousingLocationByTrainingLocation(int trainingLocationID) {
+    trace("Inside of getHousingLocationByTrainingLocation Service method.");
+    trace("Returning a list of Housing Locations by Training Location Id");
     return housingLocationRepo.findByTrainingLocation_TrainingLocationID(trainingLocationID);
   }
 
@@ -127,6 +147,8 @@ public class HousingLocationServiceImpl implements HousingLocationService {
    */
   @Override
   public List<HousingLocation> getAllHousingLocations() {
+    trace("Inside getAllHousingLocations Service method.");
+    trace("Returning a list of Housing Locations");
     return housingLocationRepo.findAll();
   }
 }

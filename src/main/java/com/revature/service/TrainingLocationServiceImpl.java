@@ -1,5 +1,8 @@
 package com.revature.service;
 
+import static com.revature.util.LoggerUtil.error;
+import static com.revature.util.LoggerUtil.trace;
+
 import com.revature.bean.TrainingLocation;
 import com.revature.exception.DeleteNonexistentException;
 import com.revature.exception.UpdateNonexistentException;
@@ -43,15 +46,20 @@ public class TrainingLocationServiceImpl implements TrainingLocationService {
   @Override
   public TrainingLocation createTrainingLocation(TrainingLocation trainingLocation)
       throws NullPointerException {
+    trace("Inside of the createTrainingLocation Service method.");
     if (getTrainingLocation(trainingLocation.getTrainingLocationID()).isPresent()) {
+      error("DuplicateKeyException has been found.");
       throw new DuplicateKeyException("Object already exists in database");
     } else {
       try {
+        trace("Saving Training Location.");
         return trainingLocationRepo.save(trainingLocation);
       } catch (TransactionSystemException t) {
+        error("TransactionSystemException has been caught.");
         Throwable myT = t.getCause().getCause();
 
         if (myT instanceof ConstraintViolationException) {
+          error("ConstraintViolationException has been found.");
           throw ((ConstraintViolationException) myT);
         }
         throw t;
@@ -69,11 +77,14 @@ public class TrainingLocationServiceImpl implements TrainingLocationService {
   @Override
   public void deleteTrainingLocation(TrainingLocation trainingLocation)
       throws NullPointerException {
+    trace("Inside of deleteTrainingLocation Service method.");
     if (!getTrainingLocation(trainingLocation.getTrainingLocationID()).isPresent()) {
+      error("DeleteNonexistentException will be thrown");
       throw new DeleteNonexistentException(
           trainingLocation + " does not exist and cannot be deleted");
     } else {
       trainingLocationRepo.delete(trainingLocation);
+      trace("Training Location has been deleted.");
     }
   }
 
@@ -84,6 +95,8 @@ public class TrainingLocationServiceImpl implements TrainingLocationService {
    */
   @Override
   public Optional<TrainingLocation> getTrainingLocation(int trainingLocationID) {
+    trace("Inside of getTrainingLocation Service method.");
+    trace("Returning a specific Training Location");
     return trainingLocationRepo.findById(trainingLocationID);
   }
 
@@ -98,16 +111,20 @@ public class TrainingLocationServiceImpl implements TrainingLocationService {
   @Override
   public TrainingLocation updateTrainingLocation(TrainingLocation trainingLocation)
       throws NullPointerException {
+    trace("Inside of the updateTrainingLocation Service method.");
     if (!getTrainingLocation(trainingLocation.getTrainingLocationID()).isPresent()) {
+      error("UpdateNonexistentException has been found.");
       throw new UpdateNonexistentException(
           trainingLocation + " does not exist and cannot be updated");
     } else {
       try {
+        trace("Training Location has been saved.");
         return trainingLocationRepo.save(trainingLocation);
       } catch (TransactionSystemException t) {
         Throwable myT = t.getCause().getCause();
 
         if (myT instanceof ConstraintViolationException) {
+          error("ConstraintViolationException has been found.");
           throw ((ConstraintViolationException) myT);
         }
         throw t;
@@ -120,6 +137,8 @@ public class TrainingLocationServiceImpl implements TrainingLocationService {
    */
   @Override
   public List<TrainingLocation> getAllTrainingLocations() {
+    trace("Inside getAllTrainingLocation Service method.");
+    trace("Returning a list of TrainingLocations");
     return trainingLocationRepo.findAll();
   }
 
