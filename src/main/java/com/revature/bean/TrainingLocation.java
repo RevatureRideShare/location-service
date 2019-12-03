@@ -14,7 +14,6 @@ import javax.validation.constraints.NotEmpty;
  * an id used to identify each training location; trainingLocationName: a string used to hold the
  * name of a training location.
  * 
- * @author Erik Haklar
  * @author Jane Shin
  * @author Roberto Rodriguez
  */

@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.ConstraintViolationException;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -21,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.transaction.TransactionSystemException;
 
 @SpringBootTest
 class TrainingLocationServiceImplIntegrationTest {
@@ -81,14 +82,12 @@ class TrainingLocationServiceImplIntegrationTest {
     existingTLocationList.add(existingTrainingLocation);
     existingTLocationList.add(updatedTrainingLocation);
     assertEquals(trainingLocationServiceImpl.getAllTrainingLocations(), existingTLocationList);
-
-    System.out.println(trainingLocationServiceImpl.getAllTrainingLocations());
   }
 
   @Test
   void testCreateBadFormatTrainingLocation() {
     TrainingLocation badFormatTrainingLocation = new TrainingLocation(5, "");
-    assertThrows(TransactionSystemException.class, () -> {
+    assertThrows(ConstraintViolationException.class, () -> {
       trainingLocationServiceImpl.createTrainingLocation(badFormatTrainingLocation);
     });
 
@@ -138,8 +137,6 @@ class TrainingLocationServiceImplIntegrationTest {
   @Test
   @Sql("training-location-script.sql")
   void testUpdateExistingTrainingLocation() {
-    System.out.println("Current state of updatedTrainingLocation" + trainingLocationServiceImpl
-        .getTrainingLocation(updatedTrainingLocation.getTrainingLocationID()));
     trainingLocationServiceImpl.updateTrainingLocation(changedTrainingLocation);
     assertEquals(trainingLocationServiceImpl.getTrainingLocation(
         changedTrainingLocation.getTrainingLocationID()), Optional.of(changedTrainingLocation));

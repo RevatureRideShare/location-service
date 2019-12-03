@@ -66,7 +66,7 @@ pipeline {
 						//sh 'ls target/surefire-reports'
                         }catch(err){
                             echo "Caught: ${err}"
-                            //currentBuild.result = 'UNSTABLE'
+                            currentBuild.result = 'UNSTABLE'
                         }
                 }                        
             }
